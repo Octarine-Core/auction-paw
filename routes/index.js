@@ -9,8 +9,8 @@ router.get("/login", function(req, res){
   res.redirect("/login.html");
 });
 
-router.post("/register", function(req, res){
-  res.render("register");
+router.get("/register", function(req, res){
+  res.redirect("/register.html");
 });
 
 module.exports = router;
