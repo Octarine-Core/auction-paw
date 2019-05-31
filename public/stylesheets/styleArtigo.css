@@ -72,12 +72,38 @@
 
     }
 
+    .conteudo-error {
+
+      margin: auto;
+      padding: 8px;
+
+      width: 80%;
+      height: 80%;
+      position: relative;
+      background-color: #00000057;
+
+    }
+
     .titles-index {
       color: rgb(0, 0, 0);
 
 
       text-align: center;
 
+    }
+
+    .titles-index {
+      color: rgb(0, 0, 0);
+
+
+      text-align: left;
+
+    }
+
+    .frase-erro{
+      width: 80%;
+      padding-top: 12%;
+      padding-left: 10%;
     }
 
 
@@ -186,4 +212,12 @@
       width: 100%;
       margin-top: 22%;
       margin-left: 75%;
+    }
+
+
+    .dinossauro{
+      width: 50%;
+      border-bottom: 26%;
+      align-content: center;
+      
     }
