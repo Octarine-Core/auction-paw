@@ -9,10 +9,12 @@ controller.register = (req, res) => {
         User.create({
             name: req.body.name,
             email: req.body.email,
-            password: bcrypt.hash(req.body.password, 8)
+            password: bcrypt.hashSync(req.body.password, 8)
         }),
         function(err, user){
-            if(err) return res.status
+            if(err) res.send(err);
+
+            res.status(200).send();
         }
     }
 }
