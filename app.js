@@ -4,9 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require("mongoose");
+var passport = require("passport");
+var session = require("express-session");
+var User = require("./models/User");
+
 var indexRouter = require('./routes/index');
 var authRouter = require("./routes/auth");
-
 
 var app = express();
 
@@ -17,13 +20,36 @@ app.set('view engine', 'pug');
 //MONGO
 mongoose.connect('mongodb://localhost:27017/auction-paw', {useNewUrlParser: true});
 
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//Servir recursos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Dados de sessão
+app.use(session({
+  secret: "segredo",
+  resave: false,
+  saveUninitialized: false
+  }));
+
+
+passport.serializeUser(
+  function(user, done){
+      done(null, user.id)});
+
+passport.deserializeUser((id, done) =>
+  User.findById(id, function(err, user){
+    done(err, user);
+  })
+);
+
+passport.use(require("./localStrategy"));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use("/", authRouter);

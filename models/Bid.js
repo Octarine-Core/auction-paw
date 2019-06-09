@@ -4,9 +4,11 @@ var BidSchema = new mongoose.Schema(
     {
         bidder: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: true
         },
-        date: Date,
-        value: mongoose.Schema.Types.Decimal128
+        date: {type: Date, required: true},
+        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 1}
     }
 )
+module.exports = mongoose.model("Bid", UserSchema);

@@ -1,16 +1,12 @@
 const express = require('express');
 const router  = express.Router();
-const jwt = require('jsonwebtoken');
 const passport = require("passport");
 
 /* POST login. */
-router.post('/login', function (req, res, next) {
-
-    passport.authenticate('local', {failureRedirect: "/login"}), 
+router.post('/login', passport.authenticate('local', {failureRedirect: "/login", successRedirect: "/me"}), 
         function(req, res){
-            res.redirect("/");
     }
-});
+);
 
 router.get("/logout", function(req, res, next){
     req.logOut();
