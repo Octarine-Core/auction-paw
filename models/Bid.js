@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var moment = require('moment');
 
 var BidSchema = new mongoose.Schema(
     {
@@ -7,8 +8,8 @@ var BidSchema = new mongoose.Schema(
             ref: "User",
             required: true
         },
-        date: {type: Date, required: true},
+        date: {type: Date, required: true, default: moment},
         value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 1}
     }
 )
-module.exports = mongoose.model("Bid", UserSchema);
+module.exports = mongoose.model("Bid", BidSchema);
