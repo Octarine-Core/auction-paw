@@ -16,8 +16,8 @@ module.exports = new LocalStrategy({
             };
             if(!bcrypt.compareSync(password, user.password)){
                 console.log("Wrong password");
-                console.log(user.password);
-                console.log(bcrypt.hashSync(password, 8));
+                //console.log(user.password);
+                //console.log(bcrypt.hashSync(password, 8));
                 return cb(null, false, {message: "incorrect Password"});
             }
             console.log("got here");

@@ -19,12 +19,14 @@ controller.register = function(req, res){
         res.status(200).send();
     });
 };
+
 controller.nameFromId = function(req, res){
     User.findById(req.body.id, (err, user)=>{
         if(err) res.send(err);
         res.send(user.name);
     });
 };
+
 
 
 

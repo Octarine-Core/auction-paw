@@ -9,7 +9,7 @@ var BidSchema = new mongoose.Schema(
             required: true
         },
         date: {type: Date, required: true, default: moment},
-        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 1}
+        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 100}
     }
 )
 module.exports = mongoose.model("Bid", BidSchema);

@@ -17,9 +17,16 @@ controller.myItems = function(req, res){
     });
 };
 
+controller.byID = function(req,res,next){
+    Item.findById(req.params.id, (err, item)=>{
+        if(err) res.send(err);
+        res.send(item);
+    })
+}
+
 //usa mongoquerystring para passar querys pelos parametros do URL
 controller.query = function(req, res){
-    if(!req.params) res.send({});
+    if(!req.query) res.send({});
     var qs = new MongoQs();
     Item.find(qs.parse(req.params), function(err, items){
         if(err)res.send(err);
@@ -43,4 +50,4 @@ controller.bid = function(req, res){
     });
 };
 
-
+module.exports = controller;
