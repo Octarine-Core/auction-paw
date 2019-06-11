@@ -21,7 +21,7 @@ router.post("/register", userController.register);
 router.get("/me", function(req, res, next){
   console.log("user" + req.user);
   if(req.isAuthenticated()){
-    res.render("index");
+    res.render("index",{title: req.user.name});
   }
   else{
     res.redirect("/login");
