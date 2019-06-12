@@ -35,7 +35,6 @@ app.use(session({
   saveUninitialized: false
   }));
 
-
 passport.serializeUser(
   function(user, done){
       done(null, user.id)});

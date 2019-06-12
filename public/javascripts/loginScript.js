@@ -1,13 +1,13 @@
 function login(){
     var formData = JSON.stringify({email: $('#email').val(), password: $('#password').val()});
   
-    $.ajax({
+    $.post({
         type: 'POST',
         url: '/login',
         data: formData,
-        success:function(){
-          window.location.replace('/me')
+        success:function(data){
+          $( "html" ).html( data );
         },
         dataType: 'json',
         contentType : 'application/json'})
-}
+};

@@ -14,6 +14,7 @@ var ItemSchema = new mongoose.Schema(
         category: String,
         bids: [{type: mongoose.Schema.Types.ObjectId, ref: "Bid"}],
         createdOn: {type:Date, required:true, default: Date.now},
+        minimum: {type: mongoose.Schema.Types.Number},
         expires: {type:Date, default: moment + 50000, required: true},
         cancelled: {type: Boolean, default: false, required: true}
     }   
