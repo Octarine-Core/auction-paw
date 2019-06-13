@@ -9,6 +9,7 @@ function ensureAuthenticated(req, res, next) {
 
 router.get('/items/:id', itemController.byID);
 router.get('/items', itemController.query);
+
 router.post('/items/:id/', ensureAuthenticated, );
 
 

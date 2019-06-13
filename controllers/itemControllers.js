@@ -34,6 +34,7 @@ controller.query = function(req, res){
     });
 };
 
+//faz um lance
 controller.bid = function(req, res){
     var bidID;
     Bid.create({
@@ -46,7 +47,7 @@ controller.bid = function(req, res){
     Item.findById(req.body.item._id, (err, item) =>{
         if(err) res.send(err);
         if(!item.isActive) res.send(404);
-        else Item.update(item, {$push: {bids: bidID}});
+        Item.update(item, {$push: {bids: bidID}});
     });
 };
 
