@@ -1,6 +1,18 @@
 var mongoose = require("mongoose");
 var moment = require('moment');
 
+var BidSchema = new mongoose.Schema(
+    {
+        bidder: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+        date: {type: Date, required: true, default: moment},
+        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 100}
+    }
+);
+
 var ItemSchema = new mongoose.Schema(
     {
         name: {type: String, required: true},
@@ -12,9 +24,9 @@ var ItemSchema = new mongoose.Schema(
         },
         images: [String],
         category: String,
-        bids: [{type: mongoose.Schema.Types.ObjectId, ref: "Bid"}],
+        bids: [BidSchema],
         createdOn: {type:Date, required:true, default: Date.now},
-        minimum: {type: mongoose.Schema.Types.Number},
+        minimum: {type: mongoose.Schema.Types.Number, min: 100, required:true, default: 100},
         expires: {type:Date, default: moment + 50000, required: true},
         cancelled: {type: Boolean, default: false, required: true}
     }   
@@ -28,10 +40,5 @@ ItemSchema.virtual("isActive").get(function(){
     }
     return true;
 });
-
-ItemSchema.methods.deActivate = function(cb){
-    //Desativa o Item mudando a data de expiracao para 'agora'
-    return this.cancelled;
-};
 
 module.exports = mongoose.model("Item", ItemSchema);
