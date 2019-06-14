@@ -2,7 +2,6 @@ var Item = require("../models/Item");
 var MongoQs = require("mongo-querystring");
 var controller = {};
 
-
 //Todos os documentos na colecao items(incluindo expirados, cancelados)
 controller.allItems = function(req, res){
     Item.find({}, (err, items)=>{
@@ -26,14 +25,14 @@ controller.byID = function(req,res,next){
         if(err) res.send(err);
         res.send(item);
     })
-}
+};
 
 //usa mongoquerystring para passar querys pelos parametros do URL
-controller.query = function(req, res){
-    if(!req.query) res.send({});
+controller.query = function (req, res) {
+    if (!req.query) res.send({});
     var qs = new MongoQs();
-    Item.find(qs.parse(req.params), function(err, items){
-        if(err)res.send(err);
+    Item.find(qs.parse(req.params), function (err, items) {
+        if (err) res.send(err);
         res.send(items);
     });
 };
@@ -62,12 +61,23 @@ controller.deActivate = function(req, res){
             item.save((err, doc) => {
                 if(!err) res.send(doc);
             });
-        };
-    });
+        }
+    })
 }
+    
 
-
-
-
+controller.save = function (req, res) {
+    var item = new Item(req.body);
+    console.log(req.body);
+    console.log(req.user._id);
+    item.save(function (err) {
+        if (err) {
+            res.send(err);
+        } else {
+            console.log("Item criado com sucesso");
+            res.redirect("../");
+        }
+    });
+};
 
 module.exports = controller;
