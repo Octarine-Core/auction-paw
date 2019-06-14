@@ -12,7 +12,7 @@ module.exports = new LocalStrategy({
             console.log("Inside local strategy callback \n"+ email + "\t" +  password);
             if(err) {return cb(err)};
             if(!user){
-                return cb(null, false, {message: "incorrect username"});
+                return cb(null, false, {message: "incorrect email"});
             };
             if(!bcrypt.compareSync(password, user.password)){
                 console.log("Wrong password");

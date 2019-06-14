@@ -16,7 +16,7 @@ function login() {
       url: '/login',
       data: formData,
       success: function () {
-        window.location.replace('/me')
+        $( "html" ).html( data );
       },
       dataType: 'json',
       contentType: 'application/json'
