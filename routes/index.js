@@ -35,9 +35,6 @@ router.post("/register", userController.register);
 
 router.post("/save", itemController.create)
 
-router.get("/mine", logged, itemController.myItems, function(req, res){res.send()});
-
-
 //Faz render dos meus items
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
