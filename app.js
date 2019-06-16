@@ -10,6 +10,7 @@ var User = require("./models/User");
 
 var indexRouter = require('./routes/index');
 var authRouter = require("./routes/auth");
+var apiROtuer = require("./routes/api");
 
 var app = express();
 
@@ -52,6 +53,7 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use("/", authRouter);
+app.use('/',  apiROtuer)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

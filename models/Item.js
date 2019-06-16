@@ -27,7 +27,7 @@ var ItemSchema = new mongoose.Schema(
         bids: [BidSchema],
         createdOn: {type:Date, required:true, default: Date.now},
         minimum: {type: mongoose.Schema.Types.Number, min: 100, required:true, default: 100},
-        expires: {type:Date, default: moment + 50000, required: true},
+        expires: {type:Date, default: moment, required: true},
         cancelled: {type: Boolean, default: false, required: true}
     }   
 );

@@ -1,6 +1,8 @@
+
 var express = require('express');
 const userController = require("../controllers/userControllers");
-const item = require("../controllers/itemControllers");
+const itemController = require("../controllers/itemControllers");
+
 var router = express.Router();
 
 var logged = function(req, res, next){
@@ -27,23 +29,18 @@ router.get("/register", function(req, res, next){
 
 router.get("/adicionarItem", logged, function(req, res, next){
   res.redirect("/adicionarItem.html");
-})
+});
 
 router.post("/register", userController.register);
 
-router.post("/save", function(req, res){
-  item.save(req, res);
-});
+router.post("/save", itemController.create)
 
-router.get("/me", function(req, res, next){
-  console.log("user" + req.user);
-  if(req.isAuthenticated()){
-    res.render("index",{title: req.user.name});
-  }
-  else{
-    res.redirect("/login");
-  };
-});
+router.get("/mine", logged, itemController.myItems, function(req, res){res.send()});
 
 
-module.exports = router;
+//Faz render dos meus items
+router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
+
+
+
+module.exports = router

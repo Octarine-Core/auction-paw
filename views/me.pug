@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1.center= name
+  p.center Pagina principal de #{name}
+  a.center(href="http://localhost:3000/logout") Logout
+  br
+  ul
+    for item in items
+        li= item.name
+        li= item.description
+        li= item.category
+        li= item.bids
+        li= item.createdOn
+        li= item.minimum
+        li= item.expires
+        li= item.cancelled

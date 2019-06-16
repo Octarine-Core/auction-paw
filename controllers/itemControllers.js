@@ -11,11 +11,12 @@ controller.allItems = function(req, res){
 };
 
 //Envia os items cujo owner e' o user a fazer o pedido
-controller.myItems = function(req, res){
+controller.myItems = function(req, res, next){
     if(!req.user)res.send("Not logged in");
     Item.find({owner: req.user._id}, function(err, items){
-        if(err) res.send(err);
-        res.send(items);
+        if(err) res.send(err)
+        res.items = items;
+        next()
     });
 };
 
@@ -62,14 +63,14 @@ controller.deActivate = function(req, res){
                 if(!err) res.send(doc);
             });
         }
-    })
-}
-    
+    });
+};
 
-controller.save = function (req, res) {
+controller.create = function (req, res) {
     var item = new Item(req.body);
     console.log(req.body);
     console.log(req.user._id);
+    item.owner = req.user._id;
     item.save(function (err) {
         if (err) {
             res.send(err);
