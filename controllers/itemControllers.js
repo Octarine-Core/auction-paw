@@ -1,28 +1,32 @@
 var Item = require("../models/Item");
-var Bid = require('../models/Bid');
 var MongoQs = require("mongo-querystring");
 var controller = {};
 
-controller.allItems = function (req, res) {
-    Item.find({}, (err, items) => {
-        if (err) res.send(err);
-        res.send(items);
-    });
-};
-controller.myItems = function (req, res) {
-    if (!req.user) res.send("Not logged in");
-    Item.find({ owner: req.user._id }, function (err, items) {
-        if (err) res.send(err);
+//Todos os documentos na colecao items(incluindo expirados, cancelados)
+controller.allItems = function(req, res){
+    Item.find({}, (err, items)=>{
+        if(err) res.send(err);
         res.send(items);
     });
 };
 
-controller.byID = function (req, res, next) {
-    Item.findById(req.params.id, (err, item) => {
-        if (err) res.send(err);
+//Envia os items cujo owner e' o user a fazer o pedido
+controller.myItems = function(req, res, next){
+    if(!req.user)res.send("Not logged in");
+    Item.find({owner: req.user._id}, function(err, items){
+        if(err) res.send(err)
+        res.items = items;
+        next()
+    });
+};
+
+//Envia ID, recebe Item com esse id
+controller.byID = function(req,res,next){
+    Item.findById(req.params.id, (err, item)=>{
+        if(err) res.send(err);
         res.send(item);
     })
-}
+};
 
 //usa mongoquerystring para passar querys pelos parametros do URL
 controller.query = function (req, res) {
@@ -34,36 +38,47 @@ controller.query = function (req, res) {
     });
 };
 
-controller.bid = function (req, res) {
-    var bidID;
-    Bid.create({
-        bidder: req.user._id,
-        value: req.body.value
-    }, function (err, bid) {
-        bidID = bid._id
-    });
-
-    Item.findById(req.body.item._id, (err, item) => {
-        if (err) res.send(err);
-        if (!item.isActive) res.send(404);
-        else Item.update(item, { $push: { bids: bidID } });
+//faz um lance, recebe o item updatado como resposta
+controller.bid = function(req, res){
+    Item.findById(req.body.item._id, (err, item) =>{
+        if(err) res.send(err);
+        if(!item.isActive) res.send(404);
+        if(item.bids[item.bids.length - 1] > req.body.bid ){res.send(500)};
+        item.bids.push(req.body.bid);
+        item.save(function(err){
+            if(!err){
+                res.send(item);
+            };
+            res.send(err);
+        });
     });
 };
 
-controller.save = function (req, res) {
+//desativa a possibilidade de fazer lances num item
+controller.deActivate = function(req, res){
+    Item.findById(req.body.item._id, (err, item) =>{
+        if(item.isActive){
+            item.cancelled = true;
+            item.save((err, doc) => {
+                if(!err) res.send(doc);
+            });
+        }
+    });
+};
+
+controller.create = function (req, res) {
     var item = new Item(req.body);
     console.log(req.body);
     console.log(req.user._id);
+    item.owner = req.user._id;
     item.save(function (err) {
         if (err) {
-            console.log(err);
-            res.render("../public/error.html");
+            res.send(err);
         } else {
             console.log("Item criado com sucesso");
             res.redirect("../");
         }
     });
-}
-
+};
 
 module.exports = controller;

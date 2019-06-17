@@ -20,7 +20,6 @@ function login() {
       },
       dataType: 'json',
       contentType: 'application/json'
-    })
-
+    });
   }
 }
