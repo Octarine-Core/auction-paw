@@ -33,7 +33,7 @@
 
       <div class="conteudo-errore">
         <div class="form">
-          <form action="/save" method="POST">
+          <form action="/save" method="POST" enctype="multipart/form-data">
             <div class="mdl-textfield mdl-js-textfield">
               <div class="name">
                 <input class="mdl-textfield__input" type="text" placeholder="Introduza nome aqui..." name="name"
@@ -61,9 +61,9 @@
                 </select>
               </div>
               <div class="time">
-                <select class="browser-default custom-select" required>
+                <select class="browser-default custom-select" name= 'time'>
                   <option selected>Tempo a leiloar...</option>
-                  <option value="1" name="time">Uma semana</option>
+                  <option value='1' name="time">Uma semana</option>
                   <option value="2" name="time">Duas semanas</option>
                   <option value="3" name="time">Três semanas</option>
                   <option value="4" name="time">Um mês</option>
@@ -83,6 +83,9 @@
               </div>
               <div class="image">
                 <img src="http://localhost:3000/imagens/imagem.png" alt="Italian Trulli">
+              </div>
+              <div class = "mdl-textfield mdl-js-textfield">
+                <input type="file" name= 'bla'>
               </div>
               <div class="button">
                 <button type="submit">Submeter</button>

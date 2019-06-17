@@ -6,14 +6,13 @@ function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { next(); }
     res.redirect('/error')
   };
-  
 
-router.get("/items/mine", ensureAuthenticated, itemController.myItems, function(req, res){res.send()});
-router.get('/items/:id', itemController.byID);
-router.get('/items', itemController.query);
+function send(req, res){res.send()};
 
-//router.post('/items/:id/', ensureAuthenticated, );
+router.get("/items/mine", ensureAuthenticated, itemController.myItems, send);;
+router.get('/items/:id', itemController.byID, send);
+router.get('/items', itemController.query, send);
 
-
+router.post('/items/:id/', ensureAuthenticated, itemController.bid);
 
 module.exports = router;
