@@ -33,7 +33,7 @@
 
       <div class="conteudo-errore">
         <div class="form">
-          <form action="/save" method="POST">
+          <form action="/save" method="POST" enctype="multipart/form-data">
             <div class="mdl-textfield mdl-js-textfield">
               <div class="name">
                 <input class="mdl-textfield__input" type="text" placeholder="Introduza nome aqui..." name="name"
@@ -83,6 +83,9 @@
               </div>
               <div class="image">
                 <img src="http://localhost:3000/imagens/imagem.png" alt="Italian Trulli">
+              </div>
+              <div class = "mdl-textfield mdl-js-textfield">
+                <input type="file" name= 'bla'>
               </div>
               <div class="button">
                 <button type="submit">Submeter</button>

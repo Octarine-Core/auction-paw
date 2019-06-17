@@ -2,6 +2,8 @@
 var express = require('express');
 const userController = require("../controllers/userControllers");
 const itemController = require("../controllers/itemControllers");
+var multer = require('multer');
+var upload = multer({dest: 'public/imagens/'});
 
 var router = express.Router();
 
@@ -33,7 +35,7 @@ router.get("/adicionarItem", logged, function(req, res, next){
 
 router.post("/register", userController.register);
 
-router.post("/save", itemController.create, function(req, res){res.redirect('/me')})
+router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')})
 
 //Faz render dos meus items
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});

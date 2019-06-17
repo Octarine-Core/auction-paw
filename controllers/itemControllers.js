@@ -71,13 +71,16 @@ controller.deActivate = function(req, res, next){
         }
     });
 };
-
+controller.parseMulti = function(req, res, next){
+    next();
+}
 controller.create = function (req, res, next) {
     var item = new Item(req.body);
-    console.log(req.body);
+    console.log(req);
     console.log(req.user._id);
     item.expires = moment().add(req.body.time, "weeks");
     item.owner = req.user._id;
+    
     item.save(function (err) {
         if (err) {
             console.log(err);
