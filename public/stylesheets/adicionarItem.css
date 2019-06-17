@@ -1,0 +1,87 @@
+.conteudo-errore {
+
+    margin: auto;
+    padding: 8px;
+
+    width: 80%;
+    height: 80%;
+    position: relative;
+    background-color: #00000057;
+
+  }
+  
+
+  .name {
+    position: fixed;
+    height: 37%;
+    width: 30%;
+    float:right;
+    margin-left: 1%;
+
+  }
+
+
+  .category {
+    position: fixed;
+    height: 37%;
+    width: 30%;
+    float:right;
+    margin-left: 33%;
+
+  }
+
+  .description {
+    position: fixed;
+    height: 37%;
+    width: 30%;
+    float:right;
+    margin-left: 1%;
+    margin-top: 6%;
+
+  }
+
+  .time {
+    position: fixed;
+    height: 37%;
+    width: 30%;
+    float:right;
+    margin-left: 33%;
+    margin-top: 6%;
+
+  }
+
+
+  .button {
+    position: fixed;
+    height: 37%;
+    width: 10%;
+   
+    margin-left: 35%;
+    bottom: -11%;
+
+  }
+
+  .value {
+    position: fixed;
+    height: 37%;
+    width: 30%;
+    float:right;
+    margin-left: 1%;
+    margin-top: 12%;
+
+  }
+
+  .image {
+    position: fixed;
+    height: 37%;
+    width: 30%;
+    float:right;
+    margin-left: 1%;
+    margin-top: 19%;
+
+  }
+
+  
+
+  
+

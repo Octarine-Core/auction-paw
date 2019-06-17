@@ -29,6 +29,8 @@ var ItemSchema = new mongoose.Schema(
         minimum: {type: mongoose.Schema.Types.Number, min: 100, required:true, default: 100},
         expires: {type:Date, default: moment, required: true},
         cancelled: {type: Boolean, default: false, required: true}
+        //falta meter o valor inicial de licitaçao
+        //aqui podiamos meter uma variavel para guardar as coordenadas do utilizador para mais tarde pegar nelas e fazer um mapa com os leiloes 
     }   
 );
 
