@@ -1,6 +1,8 @@
 var Item = require("../models/Item");
 var MongoQs = require("mongo-querystring");
 var controller = {};
+var createError = require('http-errors');
+var moment = require('moment');
 
 //Todos os documentos na colecao items(incluindo expirados, cancelados)
 controller.allItems = function(req, res, next){
@@ -46,14 +48,13 @@ controller.bid = function(req, res, next){
     Item.findById(req.body.item._id, (err, item) =>{
         if(err) res.send(err);
         if(!item.isActive) res.send(404);
-        if(item.bids[item.bids.length - 1] > req.body.bid ){res.send(500)};
-        item.bids.push(req.body.bid);
+        if((item.bids[item.bids.length - 1] > req.body.bid )|| req.body.bid < item.minimum){next(createError(500))};
+        item.bids.push(new Bid(req.body.bid));
         item.save(function(err){
-            if(!err){
-                res.item = item;
-                next();
+            if(err){
+                next(err)
             };
-            res.send(err);
+            next()
         });
     });
 };
@@ -64,8 +65,8 @@ controller.deActivate = function(req, res, next){
         if(item.isActive){
             item.cancelled = true;
             item.save((err, doc) => {
-                if(!err) res.item = doc;
-                next();
+                if(err) next(err)
+                next()
             });
         }
     });
@@ -75,13 +76,14 @@ controller.create = function (req, res, next) {
     var item = new Item(req.body);
     console.log(req.body);
     console.log(req.user._id);
+    item.expires = moment().add(req.body.time, "weeks");
     item.owner = req.user._id;
     item.save(function (err) {
         if (err) {
-            res.send(err);
-        } else {
-            next()
+            console.log(err);
+            next(err);
         }
+        next();
     });
 };
 

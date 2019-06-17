@@ -9,10 +9,10 @@ function ensureAuthenticated(req, res, next) {
 
 function send(req, res){res.send()};
 
-router.get("/items/mine", ensureAuthenticated, itemController.myItems, send);
+router.get("/items/mine", ensureAuthenticated, itemController.myItems, send);;
 router.get('/items/:id', itemController.byID, send);
 router.get('/items', itemController.query, send);
 
-//router.post('/items/:id/', ensureAuthenticated, );
+router.post('/items/:id/', ensureAuthenticated, itemController.bid);
 
 module.exports = router;
