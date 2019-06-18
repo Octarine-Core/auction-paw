@@ -2,8 +2,20 @@
 var express = require('express');
 const userController = require("../controllers/userControllers");
 const itemController = require("../controllers/itemControllers");
-var multer = require('multer');
-var upload = multer({dest: 'public/imagens/'});
+const multer = require('multer');
+const uuidv4 = require('uuid/v4');
+const path = require('path')
+var storage = multer.diskStorage({
+        destination: function(req, file, cb){
+          cb(null, 'public/imagens');
+        },
+        filename: function (req, file, cb){
+          cb(null, uuidv4() + path.extname(file.originalname))
+        }
+})
+var upload = multer({
+  storage: storage 
+});
 
 var router = express.Router();
 

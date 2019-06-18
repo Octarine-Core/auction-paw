@@ -3,6 +3,9 @@ var MongoQs = require("mongo-querystring");
 var controller = {};
 var createError = require('http-errors');
 var moment = require('moment');
+const uuidv4 = require('uuid/v4');
+const path = require('path');
+const multer = require('multer');
 
 //Todos os documentos na colecao items(incluindo expirados, cancelados)
 controller.allItems = function(req, res, next){
@@ -71,16 +74,15 @@ controller.deActivate = function(req, res, next){
         }
     });
 };
-controller.parseMulti = function(req, res, next){
-    next();
-}
+
 controller.create = function (req, res, next) {
     var item = new Item(req.body);
-    console.log(req);
-    console.log(req.user._id);
+    console.log(req.body);
     item.expires = moment().add(req.body.time, "weeks");
     item.owner = req.user._id;
-    
+    for(let i = 0; i< req.files.length; i++){
+        item.images[i] = req.files[i].filename;
+    }
     item.save(function (err) {
         if (err) {
             console.log(err);
