@@ -37,9 +37,6 @@ router.get("/login", function(req, res, next){
   res.redirect("/login.html");
 });
 
-router.get("/teste", function(req, res, next){
-  res.render("teste");
-});
 
 router.get("/register", function(req, res, next){
   res.redirect("/register.html");

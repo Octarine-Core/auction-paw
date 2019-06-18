@@ -9,7 +9,10 @@ var BidSchema = new mongoose.Schema(
             required: true
         },
         date: {type: Date, required: true, default: moment},
-        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 100}
+        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 100 ,validate : {
+            validator : Number.isInteger,
+            message   : '{VALUE} is not an integer value'
+          }}
     }
 );
 

@@ -17,17 +17,19 @@ var ItemSchema = new mongoose.Schema(
         category: String,
         bids: [BidSchema],
         createdOn: {type:Date, required:true, default: Date.now},
-        minimum: {type: mongoose.Schema.Types.Number, min: 100, required:true, default: 100},
+        
+        minimum: {type: mongoose.Schema.Types.Number, min: 100, required:true, validate : {
+                    validator : Number.isInteger,
+                    message   : '{VALUE} is not an integer value'
+                    }, 
+                    default: 100},
+
         expires: {type:Date, default: moment, required: true},
         cancelled: {type: Boolean, default: false, required: true},
 
-    
         lat: String,
         long: String
-        
-        //falta meter o valor inicial de licitaçao
-        //aqui podiamos meter uma variavel para guardar as coordenadas do utilizador para mais tarde pegar nelas e fazer um mapa com os leiloes 
-    }   
+        }   
 );
 
 ItemSchema.virtual("isActive").get(function(){
