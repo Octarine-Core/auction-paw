@@ -13,9 +13,9 @@ border-top: 1%;
 }
 
 .image{
-width: 20%;
-height: 15%;
-position: relative;
+width: 200px;
+height: 150px;
+position: absolute;
     margin-left: 76%;
     margin-top: -12.5%;
 }

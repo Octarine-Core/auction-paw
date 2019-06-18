@@ -53,6 +53,8 @@ router.post("/save", upload.array('bla', 10), itemController.create, function(re
 //Faz render dos meus items
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
+router.get('/items', itemController.query, res.rend('search',{items: res.items}));
+
 
 router.delete("/me/:id", logged, function(req, res){
   console.log(req.params.id);
