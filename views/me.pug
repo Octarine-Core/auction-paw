@@ -1,6 +1,8 @@
 extends layout
 
 block content
+
+  link(rel='stylesheet', href='http://localhost:3000/stylesheets/styleArtigo.css')
   h1.center= name
   p.center Pagina principal de #{name}
   a.center(href="http://localhost:3000/logout") Logout
