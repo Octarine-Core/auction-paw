@@ -54,6 +54,7 @@ router.post("/save", upload.array('bla', 10), itemController.create, function(re
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
 
-//router.delete('/me/:id', )
-
+router.delete("/me/:id", logged, function(req, res){
+  console.log(req.params.id);
+})
 module.exports = router

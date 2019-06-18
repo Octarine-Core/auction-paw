@@ -1,0 +1,21 @@
+.items{
+border-style:solid;
+background-color: #ffffff9e;
+height: 30%;
+border-top: 1%;
+}
+
+.items_cancelled{
+    border-style:solid;
+    background-color: #ff0000b8;
+    height: 30%;
+    border-top: 1%;
+}
+
+.image{
+width: 20%;
+height: 15%;
+position: relative;
+    margin-left: 76%;
+    margin-top: -12.5%;
+}
