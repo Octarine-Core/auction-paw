@@ -7,7 +7,7 @@ const uuidv4 = require('uuid/v4');
 const path = require('path')
 var storage = multer.diskStorage({
         destination: function(req, file, cb){
-          cb(null, 'public/imagens');
+          cb(null, 'public/imagens/items');
         },
         filename: function (req, file, cb){
           cb(null, uuidv4() + path.extname(file.originalname))
@@ -54,5 +54,7 @@ router.post("/save", upload.array('bla', 10), itemController.create, function(re
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
 
-
+router.delete("/me/:id", logged, function(req, res){
+  console.log(req.params.id);
+})
 module.exports = router
