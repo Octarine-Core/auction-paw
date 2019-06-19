@@ -41,4 +41,12 @@ ItemSchema.virtual("isActive").get(function(){
     return true;
 });
 
+ItemSchema.virtual("isStrictlyExpired").get(function(){
+    //Se estiver expirado, mas nao foi cancelado (util para descobrir quem ganhou o leilao)
+    if(moment(this.expires).isAfter(moment()) && !this.cancelled){
+        return false;
+    }
+    return true;
+})
+
 module.exports = mongoose.model("Item", ItemSchema);

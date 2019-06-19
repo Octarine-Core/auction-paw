@@ -48,21 +48,23 @@ router.get("/adicionarItem", logged, function(req, res, next){
 
 router.post("/register", userController.register);
 
-router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')})
+router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')});
 
 //Faz render dos meus items
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
 //router.get('/items', itemController.query, res.rend('search',{items: res.items}));
 
-router.post("/disable/:id", function(req, res){
+router.post("/disable/:id",logged, function(req, res){
+  
+}, function(req, res){
   itemController.deActivate(req, res);
-})
+});
 
 router.get("/items", itemController.query, function(req, res){
   if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
   res.render('displayItems', {items: res.items});
-})
+});
  
 
 

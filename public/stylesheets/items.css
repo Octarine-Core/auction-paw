@@ -19,3 +19,8 @@ position: absolute;
     margin-left: 76%;
     margin-top: -12.5%;
 }
+
+.SearchBar {
+    height: 30px;
+    width: 500px;
+}
