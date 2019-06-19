@@ -38,7 +38,7 @@ html
         for item in items
           
 
-          if item.isActive 
+          if item.category == "tecnologia" && item.cancelled == false
             ul(class='items') 
               
               div(class='name')= "Nome do produto: "+  item.name
@@ -48,30 +48,16 @@ html
               div(class='criado')= "Iniciado a: "+item.createdOn
               div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 + "€"
               div(class='expires')="Término do leilão: "+ item.expires
-              div= "Ativo: SIM"
               div(hidden='true')= item.id
-              
-              div
-                form(action='/disable/' + item.id, method='POST')
-                  button(type='submit') Desativar
+              div="userId "
+              if userId == item.owner
+                div
+                 form(action='/disable/' + item.id, method='POST')
+                    button(type='submit') Desativar
               div
                 for img, indx in item.images
                   if indx == 0
                     img(class='image' src="http://localhost:3000/imagens/items/"+ item.images[indx])
-          else
-            ul(class='items_cancelled') 
-              div(class='name')= "Nome do produto: "+  item.name
-              div(class='descricao')= "Descrição do produto: "+item.description
-              div(class='categoria')="Categoria do produto: "+ item.category
-              div(class='bids')= "Lances do produto: "+item.bids
-              div(class='criado')= "Iniciado a: "+item.createdOn
-              div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 +"€"
-              div(class='expires')="Término do leilão: "+ item.expires
-              div="Ativo: NÃO"
-              div
-                for img, indx in item.images
-                  if indx == 0
-                   img(class='image' src="http://localhost:3000/imagens/items/"+ item.images[indx])
 
 
         

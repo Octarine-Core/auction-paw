@@ -6,30 +6,31 @@ var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 const path = require('path');
 const multer = require('multer');
+var mongoose = require('mongoose');
 
 //Todos os documentos na colecao items(incluindo expirados, cancelados)
-controller.allItems = function(req, res, next){
-    Item.find({}, (err, items)=>{
-        if(err) res.send(err);
+controller.allItems = function (req, res, next) {
+    Item.find({}, (err, items) => {
+        if (err) res.send(err);
         res.items = items;
         next()
     });
 };
 
 //Envia os items cujo owner e' o user a fazer o pedido
-controller.myItems = function(req, res, next){
-    if(!req.user)res.send("Not logged in");
-    Item.find({owner: req.user._id}, function(err, items){
-        if(err) res.send(err)
+controller.myItems = function (req, res, next) {
+    if (!req.user) res.send("Not logged in");
+    Item.find({ owner: req.user._id }, function (err, items) {
+        if (err) res.send(err)
         res.items = items;
         next()
     });
 };
 
 //Envia ID, recebe Item com esse id
-controller.byID = function(req,res,next){
-    Item.findById(req.params.id, (err, item)=>{
-        if(err) res.send(err);
+controller.byID = function (req, res, next) {
+    Item.findById(req.params.id, (err, item) => {
+        if (err) res.send(err);
         res.item = item;
         next()
     })
@@ -47,14 +48,14 @@ controller.query = function (req, res, next) {
 };
 
 //faz um lance, recebe o item updatado como resposta
-controller.bid = function(req, res, next){
-    Item.findById(req.body.item._id, (err, item) =>{
-        if(err) res.send(err);
-        if(!item.isActive) res.send(404);
-        if((item.bids[item.bids.length - 1] > req.body.bid )|| req.body.bid < item.minimum){next(createError(500))};
+controller.bid = function (req, res, next) {
+    Item.findById(req.body.item._id, (err, item) => {
+        if (err) res.send(err);
+        if (!item.isActive) res.send(404);
+        if ((item.bids[item.bids.length - 1] > req.body.bid) || req.body.bid < item.minimum) { next(createError(500)) };
         item.bids.push(new Bid(req.body.bid));
-        item.save(function(err){
-            if(err){
+        item.save(function (err) {
+            if (err) {
                 next(err)
             };
             next()
@@ -63,14 +64,17 @@ controller.bid = function(req, res, next){
 };
 
 //desativa a possibilidade de fazer lances num item
-controller.deActivate = function(req, res, next){
-    Item.findById(req.body.item._id, (err, item) =>{
-        if(item.isActive){
-            item.cancelled = true;
-            item.save((err, doc) => {
-                if(err) next(err)
-                next()
-            });
+controller.deActivate = function (req, res, next) {
+    Item.findById({ _id: req.params.id }, (err, item) => {
+        console.log(req.params.id);
+        if (item.isActive) {
+            Item.findByIdAndUpdate(req.params.id, { $set: { cancelled: true } },
+                { new: true }, function (req, respond) {
+                    if (err) console.log(err);
+                    else{
+                        res.redirect('back');
+                    }
+                });
         }
     });
 };
@@ -80,9 +84,10 @@ controller.create = function (req, res, next) {
     console.log(req.body);
     item.expires = moment().add(req.body.time, "weeks");
     item.owner = req.user._id;
-    for(let i = 0; i< req.files.length; i++){
+    for (let i = 0; i < req.files.length; i++) {
         item.images[i] = req.files[i].filename;
     }
+    item.minimum *= 100;
     item.save(function (err) {
         if (err) {
             console.log(err);

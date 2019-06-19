@@ -53,8 +53,21 @@ router.post("/save", upload.array('bla', 10), itemController.create, function(re
 //Faz render dos meus items
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
-router.get('/items', itemController.query, res.rend('search',{items: res.items}));
+//router.get('/items', itemController.query, res.rend('search',{items: res.items}));
 
+router.post("/disable/:id", function(req, res){
+  itemController.deActivate(req, res);
+})
+
+router.get("/onlyTech", itemController.allItems, function(req, res){
+  var userId;
+  if(req.isAuthenticated()){
+    userId = req.user._id;
+  }else{
+    userId = "ninguem";
+  }
+  res.render('onlyTech', {items: res.items, userId: userId});
+})
 
 router.delete("/me/:id", logged, function(req, res){
   console.log(req.params.id);
