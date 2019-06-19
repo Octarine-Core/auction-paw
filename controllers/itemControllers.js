@@ -40,8 +40,9 @@ controller.byID = function (req, res, next) {
 controller.query = function (req, res, next) {
     if (!req.query) res.send({});
     var qs = new MongoQs();
-    Item.find(qs.parse(req.params), function (err, items) {
-        if (err) res.send(err);
+    console.log(qs.parse(req.query));
+    Item.find(qs.parse(req.query), function (err, items) {
+        if (err) next(err);
         res.items = items;
         next();
     });

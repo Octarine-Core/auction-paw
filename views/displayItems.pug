@@ -37,8 +37,7 @@ html
           h1= "Não tem produtos adicionados"
         for item in items
           
-
-          if item.category == "tecnologia" && item.cancelled == false
+          if item.cancelled == false
             ul(class='items') 
               
               div(class='name')= "Nome do produto: "+  item.name
@@ -49,7 +48,7 @@ html
               div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 + "€"
               div(class='expires')="Término do leilão: "+ item.expires
               div(hidden='true')= item.id
-              div="userId "
+              div=userId
               if userId == item.owner
                 div
                  form(action='/disable/' + item.id, method='POST')
@@ -58,8 +57,6 @@ html
                 for img, indx in item.images
                   if indx == 0
                     img(class='image' src="http://localhost:3000/imagens/items/"+ item.images[indx])
-
-
         
         // The Modal
         #myModal.modal

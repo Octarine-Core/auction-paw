@@ -59,17 +59,11 @@ router.post("/disable/:id", function(req, res){
   itemController.deActivate(req, res);
 })
 
-router.get("/onlyTech", itemController.allItems, function(req, res){
-  var userId;
-  if(req.isAuthenticated()){
-    userId = req.user._id;
-  }else{
-    userId = "ninguem";
-  }
-  res.render('onlyTech', {items: res.items, userId: userId});
+router.get("/items", itemController.query, function(req, res){
+  if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
+  res.render('displayItems', {items: res.items});
 })
+ 
 
-router.delete("/me/:id", logged, function(req, res){
-  console.log(req.params.id);
-})
+
 module.exports = router
