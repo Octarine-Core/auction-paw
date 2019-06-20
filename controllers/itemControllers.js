@@ -100,4 +100,13 @@ controller.create = function (req, res, next) {
     });
 };
 
+controller.viewItem = function (req, res, next) {
+    Item.findById(req.params.id, (err, item) => {
+        if (err) res.send(err);
+        else{
+            res.render('../views/viewItem', {item: item});
+        }
+    })
+};
+
 module.exports = controller;

@@ -69,7 +69,7 @@ router.get("/items", itemController.query, function(req, res){
 });
 
 router.post("/viewItem/:id", function(req, res){
-    itemController.teste(req, res);
+    itemController.viewItem(req, res);
 });
 
 router.post("/bid/:id", function(req, res){
