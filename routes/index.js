@@ -75,13 +75,8 @@ router.get("/items", itemController.query, function(req, res){
   res.render('displayItems', {items: res.items});
 });
 
-<<<<<<< HEAD
-router.post("/viewItem/:id", function(req, res){
-    itemController.viewItem(req, res);
-=======
 router.get("/viewItem/:id",itemController.byID, function(req, res){
   res.render('viewItem', {item: res.item});
->>>>>>> 17d86910212c60efbdff5012a59798a99139caeb
 });
 
 router.post("/bid/:id",logged, itemController.bid, function(req, res){
