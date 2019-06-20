@@ -7,13 +7,13 @@ const uuidv4 = require('uuid/v4');
 const path = require('path');
 const multer = require('multer');
 var mongoose = require('mongoose');
+var Bid = require('../models/BidSchema');
 
 //Todos os documentos na colecao items(incluindo expirados, cancelados)
 controller.allItems = function (req, res, next) {
     Item.find({}, (err, items) => {
-        if (err) res.send(err);
+        if (err) next(err);
         res.items = items;
-        next()
     });
 };
 
@@ -21,7 +21,7 @@ controller.allItems = function (req, res, next) {
 controller.myItems = function (req, res, next) {
     if (!req.user) res.send("Not logged in");
     Item.find({ owner: req.user._id }, function (err, items) {
-        if (err) res.send(err)
+        if (err) next(err)
         res.items = items;
         next()
     });
@@ -30,21 +30,11 @@ controller.myItems = function (req, res, next) {
 //Envia ID, recebe Item com esse id
 controller.byID = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
-        if (err) res.send(err);
+        if (err) next(err);
         res.item = item;
         next()
-    })
+    });
 };
-
-controller.teste = function (req, res, next) {
-    Item.findById(req.params.id, (err, item) => {
-        if (err) res.send(err);
-        else{
-            res.render('../views/viewItem', {item: item});
-        }
-    })
-};
-
 
 //usa mongoquerystring para passar querys pelos parametros do URL
 controller.query = function (req, res, next) {
@@ -60,17 +50,39 @@ controller.query = function (req, res, next) {
 
 //faz um lance, recebe o item updatado como resposta
 controller.bid = function (req, res, next) {
-    Item.findById(req.body.item._id, (err, item) => {
+    Item.findById(req.params.id, (err, item) => {
+        console.log(req.body);
         if (err) res.send(err);
         if (!item.isActive) res.send(404);
-        if ((item.bids[item.bids.length - 1] > req.body.bid) || req.body.bid < item.minimum) { next(createError(500)) };
-        item.bids.push(new Bid(req.body.bid));
-        item.save(function (err) {
-            if (err) {
-                next(err)
-            };
-            next()
+        Bid.find(
+            {
+                '_id':{
+                    $in: item.bids
+                }
+            },function(err, bids){
+                if(bids.length !== 0){
+                    if((req.body.bid < Math.max(bids) || req.body.bid < item.minimum))next(createError(500));
+                }
+                else{
+                    if(req.body.bid < item.minimum) next(createError(500));
+                }
+            }
+        );
+        var newBid = new Bid({
+            bidder: req.user._id,
+            value: req.body.bid
         });
+        newBid.save(function(err, bid){
+            if(err)next(err);
+            item.bids.push(newBid._id);
+            item.save(function (err, item) {
+                if (err) {
+                    next(err)
+                };
+                res.item = item.populate('bids');
+                next();
+        });
+        });    
     });
 };
 
@@ -86,7 +98,7 @@ controller.deActivate = function (req, res, next) {
                         res.redirect('back');
                     }
                 });
-        }
+        };
     });
 };
 
@@ -103,7 +115,7 @@ controller.create = function (req, res, next) {
         if (err) {
             console.log(err);
             next(err);
-        }
+        };
         next();
     });
 };

@@ -9,11 +9,11 @@ var BidSchema = new mongoose.Schema(
             required: true
         },
         date: {type: Date, required: true, default: moment},
-        value: {type: mongoose.Schema.Types.Decimal128, required: true, min: 100 ,validate : {
+        value: {type: mongoose.Schema.Types.Number, required: true, min: 100 ,validate : {
             validator : Number.isInteger,
             message   : '{VALUE} is not an integer value'
           }}
     }
 );
 
-module.exports = BidSchema;
+module.exports = mongoose.model('Bid', BidSchema);

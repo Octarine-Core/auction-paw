@@ -24,7 +24,7 @@ var logged = function(req, res, next){
     next();
   }
   else{
-    res.redirect("/error.html");
+    next(createError(505));
   }
 }
 
@@ -59,23 +59,20 @@ router.get("/me", logged, itemController.myItems, function(req, res){(res.render
 
 //router.get('/items', itemController.query, res.rend('search',{items: res.items}));
 
-router.post("/disable/:id",logged, function(req, res){
-  itemController.deActivate(req, res);
-});
+router.post("/disable/:id",logged, itemController.deActivate, 
+);
 
 router.get("/items", itemController.query, function(req, res){
   if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
   res.render('displayItems', {items: res.items});
 });
 
-router.post("/viewItem/:id", function(req, res){
-    itemController.teste(req, res);
+router.get("/viewItem/:id",itemController.byID, function(req, res){
+  res.render('viewItem', {item: res.item});
 });
 
-router.post("/bid/:id", function(req, res){
-  itemController.bid(req, res);
+router.post("/bid/:id",logged, itemController.bid, function(req, res){
+  res.redirect("/viewItem/" + res.item.id);
 });
- 
-
 
 module.exports = router

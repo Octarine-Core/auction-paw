@@ -34,18 +34,16 @@ html
               div(class='categoria')="Categoria do produto: "+ item.category
               div(class='bids')= "Lances do produto: "+item.bids
               div(class='criado')= "Iniciado a: "+item.createdOn
-              div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 + "€"
+              div(class='minimum')= "Valor inicial do leilão: "+item.minimum + "€"
               div(class='expires')="Término do leilão: "+ item.expires
               div(hidden='true')= item.id
               div=userId
               
               div
-                input(type="number" name="bids")
                 form(action='/bid/' + item.id, method='POST')
+                  input(type="number" name="bid")
                   button(type='submit') Licitar
 
-
-         
 
 
         // The Modal

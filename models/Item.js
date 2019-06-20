@@ -15,7 +15,8 @@ var ItemSchema = new mongoose.Schema(
         },
         images: [String],
         category: String,
-        bids: [BidSchema],
+        bids: [{type: mongoose.Schema.Types.ObjectId,
+            ref: "Bid"}],
         createdOn: {type:Date, required:true, default: Date.now},
         
         minimum: {type: mongoose.Schema.Types.Number, min: 100, required:true, validate : {

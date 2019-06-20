@@ -27,9 +27,5 @@ controller.nameFromId = function(req, res){
     });
 };
 
-
-
-
-
 controller.query
 module.exports = controller;
