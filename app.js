@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Dados de sessão
 app.use(session({
-  secret: "segredo",
+  secret: require('./config').localSecret,
   resave: false,
   saveUninitialized: false
   }));

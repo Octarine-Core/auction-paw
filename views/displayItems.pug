@@ -62,8 +62,7 @@ html
                   if indx == 0
                     img(class='image' src="http://localhost:3000/imagens/items/"+ item.images[indx])
               div
-                form(action='/viewItem/' + item.id, method='POST')
-                  button(type='submit') Ver item
+                a(href='/viewItem/' + item.id) VER ITEM
 
         
         // The Modal
