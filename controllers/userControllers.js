@@ -4,7 +4,7 @@ var validator = require("email-validator");
 
 var controller = {};
 
-controller.register = function(req, res){
+controller.register = function(req, res, next){
     //Create a User
     console.log(req.body.password);
     User.create(
@@ -15,17 +15,21 @@ controller.register = function(req, res){
         isAdmin: false
     },
     (err, user) => {
-        if(err) res.send(err);
-        res.status(200).send();
+        if(err) next(err);
+        next();
     });
 };
 
-controller.nameFromId = function(req, res){
+controller.nameFromId = function(req, res, next){
     User.findById(req.body.id, (err, user)=>{
-        if(err) res.send(err);
-        res.send(user.name);
+        if(err) next(err);
+        res.name = user.name;
     });
 };
+
+controller.generateApiToken = function(req, res){
+    
+}
 
 controller.query
 module.exports = controller;

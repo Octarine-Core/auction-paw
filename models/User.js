@@ -7,8 +7,10 @@ var UserSchema = new mongoose.Schema(
         password: {type:String, unique:true},
         isAdmin: {type:Boolean, required: true, default: false},
         isActive: {type:Boolean, required: true, default: true},
-        token: String
+        tokens: [String]
     }
 );
 
 module.exports = mongoose.model("User", UserSchema);
+
+
