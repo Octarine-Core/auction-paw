@@ -29,12 +29,16 @@ var logged = function(req, res, next){
 }
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'HOME' });
-});
 
-router.get("/login", function(req, res, next){
-  res.redirect("/login.html");
+router.get("/", function(req, res, next){
+  var userId;
+  if(req.isAuthenticated()){
+    userId = req.user.id;
+  }else{
+    userId = "";
+  }
+  console.log(userId);
+  res.render("loggedIndex", {userId: userId});
 });
 
 
@@ -56,14 +60,20 @@ router.get("/me", logged, itemController.myItems, function(req, res){(res.render
 //router.get('/items', itemController.query, res.rend('search',{items: res.items}));
 
 router.post("/disable/:id",logged, function(req, res){
-  
-}, function(req, res){
   itemController.deActivate(req, res);
 });
 
 router.get("/items", itemController.query, function(req, res){
   if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
   res.render('displayItems', {items: res.items});
+});
+
+router.post("/viewItem/:id", function(req, res){
+    itemController.teste(req, res);
+});
+
+router.post("/bid/:id", function(req, res){
+  itemController.bid(req, res);
 });
  
 

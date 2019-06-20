@@ -36,6 +36,16 @@ controller.byID = function (req, res, next) {
     })
 };
 
+controller.teste = function (req, res, next) {
+    Item.findById(req.params.id, (err, item) => {
+        if (err) res.send(err);
+        else{
+            res.render('../views/viewItem', {item: item});
+        }
+    })
+};
+
+
 //usa mongoquerystring para passar querys pelos parametros do URL
 controller.query = function (req, res, next) {
     if (!req.query) res.send({});
