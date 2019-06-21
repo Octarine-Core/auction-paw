@@ -6,6 +6,7 @@ const multer = require('multer');
 const uuidv4 = require('uuid/v4');
 const path = require('path')
 const createError = require('http-errors');
+
 var storage = multer.diskStorage({
         destination: function(req, file, cb){
           cb(null, 'public/imagens/items');
@@ -30,17 +31,13 @@ var logged = function(req, res, next){
 }
 
 /* GET home page. */
-
-router.get("/", function(req, res, next){
-  var userId;
-  if(req.isAuthenticated()){
-    userId = req.user.id;
-  }else{
-    userId = "";
-  }
-  console.log(userId);
-  res.render("home", {userId: userId});
-});
+router.get("/", function(req, res){
+  var id = ''
+  if(req.isAuthenticated()) id = req.user._id
+  console.log('ajdiajdij');
+  res.render("home", {userId: id}) 
+} 
+);
 
 router.get("/register", function(req, res, next){
   res.redirect("/register.html");
@@ -57,7 +54,7 @@ router.post("/register", userController.register, function(req, res){
 router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')});
 
 //Faz render dos meus items
-router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
+router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens}))});
 
 //Faz render dos leiloes que eu ganhei
 router.get("/me/won", logged, function(req, res,next){
@@ -65,13 +62,17 @@ router.get("/me/won", logged, function(req, res,next){
   next()},
   itemController.userWonAuctions,
    function(req, res){ 
-     res.render('me', {name: req.user.name, items: res.items})
-    }
+     res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens})
+    },
 );
 
 router.post("/disable/:id", logged, itemController.deActivate, function(req, res){
   res.redirect('/me');
 });
+
+router.post('/me/generateApiToken', logged, userController.generateApiToken, function(req, res){
+  res.redirect('/me');
+})
 
 router.get("/items", itemController.query, function(req, res){
   if(req.user)res.render('displayItems', {items: req.items, userId: req.user.id});

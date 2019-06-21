@@ -33,6 +33,38 @@ html
           a#myBtn.mdl-navigation__link Login/Registar
       main.mdl-layout__content
 
+        h1= 'Bem vindo '+name
+        
+
+        form(action="/me/generateApiToken", method="post")
+          p1 token expira em:
+          select.browser-default.custom-select(name='expiresIn')
+            option(selected='1', value='4') Uma semana
+            option(value='1'  ) Uma semana
+            option(value='2'  ) Duas semanas
+            option(value='3'  ) Três semanas
+            option(value='4'  ) Um mês
+            option(value='8'  ) Dois meses
+            option(value='12'   ) Três meses
+            option(value='16'   ) Quatro meses
+            option(value='20'   ) Cinco meses
+            option(value='24'   ) Seis meses
+            option(value='28'   ) Sete meses
+            option(value='32'   ) Oito meses
+            option(value='36'   ) Nove meses
+            option(value='40'   ) Dez meses
+            option(value='44'   ) Onze meses
+            option(value='48'   ) Um ano
+          br
+          input(type="submit", value="GERAR TOKEN DE API")
+        h5 TOKENS
+        for token in tokens
+          p1=token
+          br
+        
+        h4 OS MEUS ARTIGOS
+        
+
         if !items
           h1= "Não tem produtos"
         else

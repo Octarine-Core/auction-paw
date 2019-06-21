@@ -20,7 +20,7 @@ html
           .mdl-layout-spacer
           // Navigation
           nav.mdl-navigation
-            if userId == ""
+            if !userId
               a#myBtn Login/Registar
             else
               a#myBtn Logout
@@ -29,7 +29,7 @@ html
         nav.mdl-navigation
           a.mdl-navigation__link(href='') Categorias
           a.mdl-navigation__link(href='http://localhost:3000/adicionarItem.html') Leiloar Produto
-          if userId == ""
+          if userId === ""
             a#myBtn.mdl-navigation__link Login/Registar
           else
             a#myBtn.mdl-navigation__link Logout

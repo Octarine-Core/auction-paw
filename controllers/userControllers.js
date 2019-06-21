@@ -32,10 +32,10 @@ controller.nameFromId = function(req, res, next){
 
 //generates an API token, saves it in the User 'token' field, and puts it in the body of the response
 controller.generateApiToken = function(req, res, next){
-    jwt.sign(req.user.id, secret, {expiresIn: req.body.expiresIn}, function(err, token){
+    jwt.sign({id: req.user.id}, secret, {expiresIn: req.body.expiresIn+'w'}, function(err, token){
         if(err){next(err)};
-        res.body.token = token;
-        User.update({_id: req.user.id}, {$push: {tokens: res.body.token}}, function(err, raw){
+        res.token = token;
+        User.update({_id: req.user.id}, {$push: {tokens: res.token}}, function(err, raw){
             if(err)next(err);
             next();
         });
