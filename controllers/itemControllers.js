@@ -33,12 +33,13 @@ controller.userWonAuctions = function(req, res, next){
         var wonItems = [];
         items.forEach(item => {
             if(item.winningBid){
-                if(item.winningBid.bidder === req.body.id){
+                if(item.winningBid.bidder === req.userid){
                     wonItems.push(item);
                 };
             };
         });
         req.items = wonItems;
+        next();
     });
 };
 
