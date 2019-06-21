@@ -46,7 +46,7 @@ controller.userWonAuctions = function(req, res, next){
 controller.byID = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         if (err) next(err);
-        req.item = item;
+        res.item = item;
         next();
     });
 };
