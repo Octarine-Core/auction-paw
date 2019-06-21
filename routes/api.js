@@ -10,15 +10,19 @@ function sendJson(data){
 };
 
 router.get("/items/mine", passport.authenticate('jwt', {session:false}) , itemController.myItems,
-function(req, res, next){
-  sendJson(res.items)
+function(req, res){
+  sendJson(res.items);
 });
 
-router.get('/items/:id', itemController.byID, send);
+router.get('/items/:id', itemController.byID, function(req, res){
+  sendJson(res.items);
+});
 router.get('/items', itemController.query,function(req,res,next){
   res.json(res.items);
 });
 
-router.post('/items/:id/', passport.authenticate('jwt', {session:false}), itemController.bid, sendJson(res.item));
+router.post('/items/:id/', passport.authenticate('jwt', {session:false}), itemController.bid, function(req, res){
+  sendJson(res.item);
+});
 
 module.exports = router;
