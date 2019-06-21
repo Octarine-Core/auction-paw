@@ -88,7 +88,7 @@ router.post("/bid/:id",logged, itemController.bid, function(req, res){
 });
 
 router.get("/backoffice",logged, function(req, res){
-  res.render('backoffice', userController.array);
+  res.render('backoffice', );
 });
 
 
