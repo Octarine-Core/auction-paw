@@ -11,8 +11,8 @@ function sendJson(data){
 
 router.get("/items/mine", passport.authenticate('jwt', {session:false}) , itemController.myItems,
 function(req, res, next){
-
-}, send);
+  sendJson(res.items)
+});
 
 router.get('/items/:id', itemController.byID, send);
 router.get('/items', itemController.query,function(req,res,next){
