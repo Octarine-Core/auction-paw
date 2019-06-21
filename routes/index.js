@@ -87,5 +87,9 @@ router.post("/bid/:id",logged, itemController.bid, function(req, res){
   res.redirect("/viewItem/" + res.item.id);
 });
 
+router.get("/backoffice",logged, function(req, res){
+  res.render('backoffice', userController.array);
+});
+
 
 module.exports = router
