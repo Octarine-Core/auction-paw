@@ -22,6 +22,16 @@ controller.register = function(req, res, next){
     });
 };
 
+controller.allUsers = function(req, res, next){
+    User.find({}, function(err, users){
+        if(err) next(err);
+        else{
+            res.users = users;
+            next();
+        }
+    });
+}
+
 controller.nameFromId = function(req, res, next){
     User.findById(req.body.id, (err, user)=>{
         if(err) next(err);

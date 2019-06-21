@@ -47,7 +47,10 @@ router.get("/adicionarItem", logged, function(req, res, next){
   res.redirect("/adicionarItem.html");
 });
 
-router.post("/register", userController.register, function(req, res){
+router.post("/register",function(req, res, next){
+  if(req.isAuthenticated) next(createError(500));
+  else{next()};
+}, userController.register, function(req, res){
   res.redirect('/')
 });
 
