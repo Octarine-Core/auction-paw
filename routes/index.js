@@ -25,7 +25,7 @@ var logged = function(req, res, next){
     next();
   }
   else{
-    next(createError(505));
+    next(createError(403));
   }
 }
 
@@ -39,7 +39,7 @@ router.get("/", function(req, res, next){
     userId = "";
   }
   console.log(userId);
-  res.render("loggedIndex", {userId: userId});
+  res.render("home", {userId: userId});
 });
 
 router.get("/register", function(req, res, next){
@@ -50,7 +50,9 @@ router.get("/adicionarItem", logged, function(req, res, next){
   res.redirect("/adicionarItem.html");
 });
 
-router.post("/register", userController.register);
+router.post("/register", userController.register, function(req, res){
+  res.redirect('/')
+});
 
 router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')});
 
@@ -59,8 +61,8 @@ router.get("/me", logged, itemController.myItems, function(req, res){(res.render
 
 //Faz render dos leiloes que eu ganhei
 router.get("/me/won", logged, function(req, res,next){
-  req.body.id = req.user.id
-  next();},
+  req.userid = req.user.id
+  next()},
   itemController.userWonAuctions,
    function(req, res){ 
      res.render('me', {name: req.user.name, items: res.items})

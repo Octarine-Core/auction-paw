@@ -4,8 +4,10 @@ const passport = require("passport");
 
 /* POST login. */
 function notLogged(req, res, next){
-    if(!req.user)next();
-    next(500);
+    if(!req.isAuthenticated()) next();
+    else{
+      next(403);
+    }
 }
 
 var logged = function(req, res, next){
@@ -17,9 +19,7 @@ var logged = function(req, res, next){
     }
   };
 
-router.post('/login', notLogged, passport.authenticate('local', {failureRedirect: "/login", successRedirect: "/me"}), 
-        function(req, res){
-    }
+router.post('/login', notLogged, passport.authenticate('local', {failureRedirect: "/login", successRedirect: "/me"})
 );
 
 router.get("/logout", logged, function(req, res, next){
