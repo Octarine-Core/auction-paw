@@ -1,18 +1,22 @@
 var express = require("express");
 var router = express.Router();
+var passport = require('passport');
 const itemController = require("../controllers/itemControllers");
 
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) { next(); }
-    res.redirect('/error')
-  };
+function sendJson(data){return function(req, res){
+  res.json(data);
+}};
 
-function send(req, res){res.send()};
+router.get("/items/mine", passport.authenticate('jwt', {session:false}) , itemController.myItems,
+function(req, res, next){
 
-router.get("/items/mine", ensureAuthenticated, itemController.myItems, send);;
+}, send);
+
 router.get('/items/:id', itemController.byID, send);
-router.get('/items', itemController.query, send);
+router.get('/items', itemController.query,function(req,res,next){
+  res.json(res.items);
+});
 
-router.post('/items/:id/', ensureAuthenticated, itemController.bid);
+router.post('/items/:id/', passport.authenticate('jwt', {session:false}), itemController.bid, sendJson(res.item));
 
 module.exports = router;

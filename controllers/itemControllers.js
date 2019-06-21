@@ -7,23 +7,38 @@ const uuidv4 = require('uuid/v4');
 const path = require('path');
 const multer = require('multer');
 var mongoose = require('mongoose');
-var Bid = require('../models/BidSchema');
+var Bid = require('../models/Bid');
 
 //Todos os documentos na colecao items(incluindo expirados, cancelados)
 controller.allItems = function (req, res, next) {
     Item.find({}, (err, items) => {
         if (err) next(err);
         res.items = items;
+        next();
     });
 };
 
 //Envia os items cujo owner e' o user a fazer o pedido
 controller.myItems = function (req, res, next) {
-    if (!req.user) res.send("Not logged in");
     Item.find({ owner: req.user._id }, function (err, items) {
         if (err) next(err)
         res.items = items;
-        next()
+        next();
+    });
+};
+
+//Devolve os items cujo user passado pelo body ganhou
+controller.userWonAuctions = function(req, res, next){
+    Item.find({}, function (err, items) {
+        var wonItems = [];
+        items.forEach(item => {
+            if(item.winningBid){
+                if(item.winningBid.bidder === req.body.id){
+                    wonItems.push(item);
+                };
+            };
+        });
+        req.items = wonItems;
     });
 };
 
@@ -31,8 +46,8 @@ controller.myItems = function (req, res, next) {
 controller.byID = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         if (err) next(err);
-        res.item = item;
-        next()
+        req.item = item;
+        next();
     });
 };
 
@@ -79,14 +94,14 @@ controller.bid = function (req, res, next) {
                 if (err) {
                     next(err)
                 };
-                res.item = item.populate('bids');
+                res.item = item;
                 next();
         });
         });    
     });
 };
 
-//desativa a possibilidade de fazer lances num item
+//desativa a possibilidade de fazer lances num item (ninguem ganha :c ))
 controller.deActivate = function (req, res, next) {
     Item.findById({ _id: req.params.id }, (err, item) => {
         console.log(req.params.id);
@@ -102,6 +117,7 @@ controller.deActivate = function (req, res, next) {
     });
 };
 
+//Cria um item
 controller.create = function (req, res, next) {
     var item = new Item(req.body);
     console.log(req.body);

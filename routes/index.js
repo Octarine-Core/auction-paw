@@ -41,7 +41,6 @@ router.get("/", function(req, res, next){
   res.render("loggedIndex", {userId: userId});
 });
 
-
 router.get("/register", function(req, res, next){
   res.redirect("/register.html");
 });
@@ -57,13 +56,22 @@ router.post("/save", upload.array('bla', 10), itemController.create, function(re
 //Faz render dos meus items
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items}))});
 
-//router.get('/items', itemController.query, res.rend('search',{items: res.items}));
-
-router.post("/disable/:id",logged, itemController.deActivate, 
+//Faz render dos leiloes que eu ganhei
+router.get("/me/won", logged, function(req, res,next){
+  req.body.id = req.user.id
+  next();},
+  itemController.userWonAuctions,
+   function(req, res){ 
+     res.render('me', {name: req.user.name, items: res.items})
+    }
 );
 
+router.post("/disable/:id", logged, itemController.deActivate, function(req, res){
+  res.redirect('/me');
+});
+
 router.get("/items", itemController.query, function(req, res){
-  if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
+  if(req.user)res.render('displayItems', {items: req.items, userId: req.user.id});
   res.render('displayItems', {items: res.items});
 });
 
@@ -74,5 +82,6 @@ router.get("/viewItem/:id",itemController.byID, function(req, res){
 router.post("/bid/:id",logged, itemController.bid, function(req, res){
   res.redirect("/viewItem/" + res.item.id);
 });
+
 
 module.exports = router

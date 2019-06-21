@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var moment = require('moment');
-var BidSchema = require('./BidSchema');
+var Bid = require('./Bid');
 
 
 
@@ -30,8 +30,22 @@ var ItemSchema = new mongoose.Schema(
 
         lat: String,
         long: String
-        }   
+        }   ,
+        {
+            toObject: { virtuals: true },
+            toJSON: { virtuals: true }
+        }
 );
+
+ItemSchema.virtual("winningBid").get(function(){
+    //devolve nulo se estiver cancelado, ainda nao tiver expirado, ou nao tiver bids.
+    if(this.isStrictlyExpired && this.bids.length != 0){
+       Bid.find(bids[bids.length] ,function(err, bid){
+           return bid;
+       });
+    }
+    return null;
+});
 
 ItemSchema.virtual("isActive").get(function(){
     //Verifica se esta ativo verificando se ainda esta dentro do prazo de expiracao

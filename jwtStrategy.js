@@ -2,12 +2,13 @@ var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'secret';
+opts.secretOrKey = require('./config').jwtSecret;
 opts.issuer = 'accounts.examplesoft.com';
 opts.audience = 'auction-paw.net';
+var User = require('./models/User')
 
 module.exports = new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub}, function(err, user) {
+    User.findById(jwt_payload.sub, function(err, user) {
         if (err) {
             return done(err, false);
         }
@@ -15,7 +16,6 @@ module.exports = new JwtStrategy(opts, function(jwt_payload, done) {
             return done(null, user);
         } else {
             return done(null, false);
-            // or you could create a new account
         }
     });
 });
