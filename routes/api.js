@@ -3,9 +3,11 @@ var router = express.Router();
 var passport = require('passport');
 const itemController = require("../controllers/itemControllers");
 
-function sendJson(data){return function(req, res){
-  res.json(data);
-}};
+function sendJson(data){
+  return function(req, res){
+    res.json(data);
+  }
+};
 
 router.get("/items/mine", passport.authenticate('jwt', {session:false}) , itemController.myItems,
 function(req, res, next){
