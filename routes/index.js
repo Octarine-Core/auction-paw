@@ -50,7 +50,9 @@ router.get("/adicionarItem", logged, function(req, res, next){
   res.redirect("/adicionarItem.html");
 });
 
-router.post("/register", userController.register);
+router.post("/register", userController.register, function(req, res){
+  res.redirect('/')
+});
 
 router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')});
 
