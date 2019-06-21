@@ -48,7 +48,7 @@ router.get("/adicionarItem", logged, function(req, res, next){
 });
 
 router.post("/register",function(req, res, next){
-  if(req.isAuthenticated) next(createError(500));
+  if(req.isAuthenticated()) next(createError(500));
   else{next()};
 }, userController.register, function(req, res){
   res.redirect('/')
@@ -79,7 +79,7 @@ router.post('/me/generateApiToken', logged, userController.generateApiToken, fun
 
 router.get("/items", itemController.query, function(req, res){
   if(req.user)res.render('displayItems', {items: req.items, userId: req.user.id});
-  res.render('displayItems', {items: res.items});
+  else{res.render('displayItems', {items: res.items});}
 });
 
 router.get("/viewItem/:id",itemController.byID, function(req, res){
