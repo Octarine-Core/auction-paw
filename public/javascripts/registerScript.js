@@ -13,3 +13,8 @@ function register(){
         dataType: 'json',
         contentType : 'application/json'})
 }
+
+function redirect(){
+  window.location.href = "http://localhost:3000/"; 
+  // a(href='http://localhost:3000/register')
+}

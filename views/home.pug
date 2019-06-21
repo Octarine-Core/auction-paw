@@ -29,6 +29,8 @@ html
         nav.mdl-navigation
           a.mdl-navigation__link(href='') Categorias
           a.mdl-navigation__link(href='http://localhost:3000/adicionarItem.html') Leiloar Produto
+          //a.mdl-navigation__link(href='http://localhost:3000/register') Register
+
           if userId === ""
             a#myBtn.mdl-navigation__link Login/Registar
           else
@@ -102,6 +104,6 @@ html
             .novoRegisto
               br
               h8
-                a(href='#')  Ainda não está registado? Clique aqui! 
+                a(href='http://localhost:3000/register')  Ainda não está registado? Clique aqui! 
     script(src='http://localhost:3000/javascripts/modal.js')
     script(src='http://localhost:3000/javascripts/loginScript.js')
