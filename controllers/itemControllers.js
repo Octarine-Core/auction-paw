@@ -68,8 +68,8 @@ controller.query = function (req, res, next) {
 controller.bid = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         console.log(req.body);
-        if (err) res.send(err);
-        if (!item.isActive) res.send(404);
+        if (err) res.send(createError(err));
+        if (!item.isActive) res.send(createError(404));
         Bid.find(
             {
                 '_id':{

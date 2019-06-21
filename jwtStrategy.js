@@ -3,12 +3,12 @@ var JwtStrategy = require('passport-jwt').Strategy,
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = require('./config').jwtSecret;
-opts.issuer = 'accounts.examplesoft.com';
-opts.audience = 'auction-paw.net';
-var User = require('./models/User')
+
+var User = require('./models/User');
 
 module.exports = new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findById(jwt_payload.sub, function(err, user) {
+    User.findById(jwt_payload.id, function(err, user) {
+        console.log(jwt_payload)
         if (err) {
             return done(err, false);
         }
