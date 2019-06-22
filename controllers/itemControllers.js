@@ -13,7 +13,10 @@ var Bid = require('../models/Bid');
 controller.allItems = function (req, res, next) {
     Item.find({}).populate('bids').populate('owner').exec(function(err, items){
         if(err)next(err);
-        res.items = items;
+        else{
+            res.items = items;
+            next();
+        }
     });
 };
 

@@ -90,8 +90,6 @@ router.post("/bid/:id",logged, itemController.bid, function(req, res){
   res.redirect("/viewItem/" + res.item.id);
 });
 
-router.get("/backoffice",logged, userController.allUsers, function(req, res){
-  res.render('backoffice',{ user : res.users });
-});
+
 
 module.exports = router

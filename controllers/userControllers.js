@@ -1,6 +1,5 @@
 var User = require("../models/User");
 var bcrypt = require("bcrypt");
-var validator = require("email-validator");
 var jwt = require('jsonwebtoken');
 var secret = require('../config').jwtSecret;
 
@@ -8,7 +7,6 @@ var controller = {};
 
 controller.register = function(req, res, next){
     //Create a User
-    console.log(req.body.password);
     User.create(
         {
         name: req.body.name,
@@ -16,9 +14,11 @@ controller.register = function(req, res, next){
         password: bcrypt.hashSync(req.body.password, 8),
         isAdmin: false
     },
-    (err, user) => {
-        if(err) next(err);
+    function(err, user){
+        if(err){console.log(err)
+        next(err)}
         else{
+            res.user = user;
             next();
         }
     });
@@ -65,16 +65,14 @@ controller.disableUser = function(req, res, next){
         if(err)next(err)
         else next();
     });
-}
+};
 
-//
+//torna um user num admin
 controller.makeAdmin = function(req, res, next){
     User.update({_id: req.params.id}, {isAdmin: true}, function(err, user){
         if(err)next(err)
         else next();
     });
-}
-
-
+};
 controller.query
 module.exports = controller;

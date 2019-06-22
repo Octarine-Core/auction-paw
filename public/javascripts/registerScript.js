@@ -8,7 +8,7 @@ function register(){
         url: '/register',
         data: formData,
         success:function(){
-          window.location.replace('/me')
+          window.location.replace('/')
         },
         dataType: 'json',
         contentType : 'application/json'})
@@ -16,5 +16,4 @@ function register(){
 
 function redirect(){
   window.location.href = "http://localhost:3000/"; 
-  // a(href='http://localhost:3000/register')
 }
