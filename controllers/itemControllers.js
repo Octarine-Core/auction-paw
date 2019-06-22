@@ -73,6 +73,7 @@ controller.bid = function (req, res, next) {
         console.log(req.body);
         if (err) res.send(createError(err));
         if (!item.isActive) res.locals.send(createError(404));
+        req.body.bid*=100;
         Bid.find(
             {
                 '_id':{

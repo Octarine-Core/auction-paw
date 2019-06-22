@@ -78,7 +78,7 @@ router.post('/me/generateApiToken', logged, userController.generateApiToken, fun
 })
 
 router.get("/items", itemController.query, function(req, res){
-  if(req.user)res.render('displayItems', {items: req.items, userId: req.user.id});
+  if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
   else{res.render('displayItems', {items: res.items});}
 });
 
