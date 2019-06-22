@@ -81,11 +81,9 @@ controller.bid = function (req, res, next) {
                 }
             },function(err, bids){
                 if(bids.length !== 0){
-                    if((req.body.bid < Math.max(bids) || req.body.bid < item.minimum))next(createError(500));
+                    if((req.body.bid < Math.max(bids)))next(createError(500));
                 }
-                else{
-                    if(req.body.bid < item.minimum) next(createError(500));
-                }
+
             }
         );
         var newBid = new Bid({
