@@ -9,12 +9,11 @@ const multer = require('multer');
 var mongoose = require('mongoose');
 var Bid = require('../models/Bid');
 
-//Todos os documentos na colecao items(incluindo expirados, cancelados)
+//Todos os documentos na colecao items(incluindo expirados, cancelados) e os documentos consituintes
 controller.allItems = function (req, res, next) {
-    Item.find({}, (err, items) => {
-        if (err) next(err);
+    Item.find({}).populate('bids').populate('owner').exec(function(err, items){
+        if(err)next(err);
         res.items = items;
-        next();
     });
 };
 
@@ -70,7 +69,7 @@ controller.bid = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         console.log(req.body);
         if (err) res.send(createError(err));
-        if (!item.isActive) res.send(createError(404));
+        if (!item.isActive) res.locals.send(createError(404));
         Bid.find(
             {
                 '_id':{
@@ -133,11 +132,14 @@ controller.create = function (req, res, next) {
         if (err) {
             console.log(err);
             next(err);
-        };
-        next();
+        }
+        else{
+            next();
+        }
     });
 };
 
+/*
 controller.viewItem = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         if (err) res.send(err);
@@ -147,4 +149,5 @@ controller.viewItem = function (req, res, next) {
     })
 };
 
+*/
 module.exports = controller;

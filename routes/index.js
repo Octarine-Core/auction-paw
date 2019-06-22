@@ -94,7 +94,4 @@ router.get("/backoffice",logged, userController.allUsers, function(req, res){
   res.render('backoffice',{ user : res.users });
 });
 
-router.get("/viewItem/:id",itemController.byID, function(req, res){
-  res.render('viewItem', {item: res.item});
-});
 module.exports = router

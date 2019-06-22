@@ -18,7 +18,9 @@ controller.register = function(req, res, next){
     },
     (err, user) => {
         if(err) next(err);
-        next();
+        else{
+            next();
+        }
     });
 };
 
@@ -35,23 +37,44 @@ controller.allUsers = function(req, res, next){
 controller.nameFromId = function(req, res, next){
     User.findById(req.body.id, (err, user)=>{
         if(err) next(err);
-        res.name = user.name;
+        else{
+            res.name = user.name;
+        }
+        
     });
 };
 
-
-//generates an API token, saves it in the User 'token' field, and puts it in the body of the response
+//Gera um token para a API, grava-o no documento mongo correspondente, e poem-lo na resposta para ser utilizado por middleware
 controller.generateApiToken = function(req, res, next){
-    jwt.sign({id: req.user.id}, secret, {expiresIn: req.body.expiresIn+'w'}, function(err, token){
-        if(err){next(err)};
-        res.token = token;
-        User.update({_id: req.user.id}, {$push: {tokens: res.token}}, function(err, raw){
-            if(err)next(err);
-            next();
+    if(req.body.expiresIn < 1 || req.body.expiresIn > 50) next(500);
+    else{
+        jwt.sign({id: req.user.id}, secret, {expiresIn: req.body.expiresIn+'w'}, function(err, token){
+            if(err){next(err)};
+            res.token = token;
+            User.update({_id: req.user.id}, {$push: {tokens: res.token}}, function(err, raw){
+                if(err)next(err);
+                next();
+            });
         });
-    });
-    
+    }
 }
+
+//previne um user de fazer login
+controller.disableUser = function(req, res, next){
+    User.update({_id: req.params.id}, {isActive: false}, function(err, user){
+        if(err)next(err)
+        else next();
+    });
+}
+
+//
+controller.makeAdmin = function(req, res, next){
+    User.update({_id: req.params.id}, {isAdmin: true}, function(err, user){
+        if(err)next(err)
+        else next();
+    });
+}
+
 
 controller.query
 module.exports = controller;
