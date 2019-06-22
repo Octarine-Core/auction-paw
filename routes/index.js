@@ -78,7 +78,7 @@ router.post('/me/generateApiToken', logged, userController.generateApiToken, fun
 })
 
 router.get("/items", itemController.query, function(req, res){
-  if(req.user)res.render('displayItems', {items: req.items, userId: req.user.id});
+  if(req.user)res.render('displayItems', {items: res.items, userId: req.user.id});
   else{res.render('displayItems', {items: res.items});}
 });
 
@@ -90,8 +90,6 @@ router.post("/bid/:id",logged, itemController.bid, function(req, res){
   res.redirect("/viewItem/" + res.item.id);
 });
 
-router.get("/backoffice",logged, userController.allUsers, function(req, res){
-  res.render('backoffice',{ user : res.users });
-});
+
 
 module.exports = router

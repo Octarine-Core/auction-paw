@@ -13,7 +13,10 @@ var Bid = require('../models/Bid');
 controller.allItems = function (req, res, next) {
     Item.find({}).populate('bids').populate('owner').exec(function(err, items){
         if(err)next(err);
-        res.items = items;
+        else{
+            res.items = items;
+            next();
+        }
     });
 };
 
@@ -70,6 +73,7 @@ controller.bid = function (req, res, next) {
         console.log(req.body);
         if (err) res.send(createError(err));
         if (!item.isActive) res.locals.send(createError(404));
+        req.body.bid*=100;
         Bid.find(
             {
                 '_id':{
@@ -77,11 +81,9 @@ controller.bid = function (req, res, next) {
                 }
             },function(err, bids){
                 if(bids.length !== 0){
-                    if((req.body.bid < Math.max(bids) || req.body.bid < item.minimum))next(createError(500));
+                    if((req.body.bid < Math.max(bids)))next(createError(500));
                 }
-                else{
-                    if(req.body.bid < item.minimum) next(createError(500));
-                }
+
             }
         );
         var newBid = new Bid({

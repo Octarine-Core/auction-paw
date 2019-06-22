@@ -55,6 +55,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use("/", authRouter);
 app.use('/api', apiROtuer)
+app.use('/admin', require('./routes/admin'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
