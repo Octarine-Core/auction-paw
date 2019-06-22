@@ -11,7 +11,7 @@ function(req, res){
 });
 
 router.get('/items/:id', itemController.byID, function(req, res){
-  res.json(res.items);
+  res.json(res.item);
 });
 router.get('/items', itemController.query,function(req,res,next){
   res.json(res.items);

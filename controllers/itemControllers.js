@@ -54,9 +54,7 @@ controller.byID = function (req, res, next) {
 
 //usa mongoquerystring para passar querys pelos parametros do URL
 controller.query = function (req, res, next) {
-    if (!req.query) res.send({});
     var qs = new MongoQs();
-    console.log(qs.parse(req.query));
     Item.find(qs.parse(req.query))
     .populate('bids')
     .exec(function (err, items) {
