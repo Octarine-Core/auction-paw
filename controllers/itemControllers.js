@@ -30,19 +30,26 @@ controller.myItems = function (req, res, next) {
 };
 
 //Devolve os items cujo user passado pelo body ganhou
+
 controller.userWonAuctions = function(req, res, next){
-    Item.find({}, function (err, items) {
-        var wonItems = [];
-        items.forEach(item => {
-            if(item.winningBid){
-                if(item.winningBid.bidder === req.userid){
-                    wonItems.push(item);
+    var wonItems = [];
+    Item.find()
+    .populate('bids')
+    .exec(
+        function(err, items){
+            items.forEach(item => {
+                console.log(item)
+                if(item.isStrictlyExpired && item.bids.length > 0){
+                    if(item.bids[item.bids.length - 1].bidder == req.user._id){
+                        wonItems.push(item);
+                    };
                 };
-            };
-        });
-        req.items = wonItems;
-        next();
-    });
+            });
+            res.items = wonItems;
+            console.log(res.items);
+            next();
+        }  
+    )
 };
 
 //Envia ID, recebe Item com esse id
@@ -72,7 +79,7 @@ controller.bid = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         console.log(req.body);
         if (err) res.send(createError(err));
-        if (!item.isActive) res.locals.send(createError(404));
+        if (!item.isActive) res.send(createError(404));
         req.body.bid*=100;
         Bid.find(
             {
@@ -81,7 +88,11 @@ controller.bid = function (req, res, next) {
                 }
             },function(err, bids){
                 if(bids.length !== 0){
-                    if((req.body.bid < Math.max(bids)))next(createError(500));
+                    var valueBids = [];
+                    bids.forEach(bid => {
+                        valueBids.push(bid.value);
+                    });
+                    if((req.body.bid < Math.max(valueBids)))next(createError(500));
                 }
 
             }

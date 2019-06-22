@@ -42,7 +42,7 @@ ItemSchema.virtual("currentPrice").get(function(){
     }
     if(this.bids.length==0) return this.minimum
     else{
-        Bid.find(this.bids[this.bids.length], function(err, bid){
+        Bid.findById(this.bids[this.bids.length], function(err, bid){
             return bid;
         });
     };
@@ -50,8 +50,13 @@ ItemSchema.virtual("currentPrice").get(function(){
 ItemSchema.virtual("winningBid").get(function(){
     //devolve nulo se estiver cancelado, ainda nao tiver expirado, ou nao tiver bids.
     if(this.isStrictlyExpired && this.bids.length != 0){
-       Bid.find(this.bids[this.bids.length] ,function(err, bid){
-           return bid;
+        Bid.find({}, function(err, docs){
+            console.log(docs);
+            var valueBids = [];
+            docs.forEach(bid => {
+                valueBids.push(bid.value);
+            });
+           return Math.max(valueBids)
        });
     }
     return null;
@@ -60,7 +65,8 @@ ItemSchema.virtual("winningBid").get(function(){
 ItemSchema.virtual("isActive").get(function(){
     //Verifica se esta ativo verificando se ainda esta dentro do prazo de expiracao
 
-    if(moment(this.expires).isBefore(moment()) || this.cancelled){
+    if(this.cancelled) return false;
+    if(moment(this.expires).isBefore(moment())){
         return false;
     }
     return true;
@@ -68,10 +74,11 @@ ItemSchema.virtual("isActive").get(function(){
 
 ItemSchema.virtual("isStrictlyExpired").get(function(){
     //Se estiver expirado, mas nao foi cancelado (util para descobrir quem ganhou o leilao)
-    if(moment(this.expires).isAfter(moment()) && !this.cancelled){
-        return false;
+    if(this.cancelled) return false;
+    if(moment(this.expires).isBefore(moment())){
+        return true;
     }
-    return true;
+    return false;
 })
 
 module.exports = mongoose.model("Item", ItemSchema);

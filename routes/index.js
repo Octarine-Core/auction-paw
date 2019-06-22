@@ -60,9 +60,7 @@ router.post("/save", upload.array('bla', 10), itemController.create, function(re
 router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens}))});
 
 //Faz render dos leiloes que eu ganhei
-router.get("/me/won", logged, function(req, res,next){
-  req.userid = req.user.id
-  next()},
+router.get("/me/won", logged,
   itemController.userWonAuctions,
    function(req, res){ 
      res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens})

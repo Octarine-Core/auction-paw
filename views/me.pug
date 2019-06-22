@@ -68,8 +68,9 @@ html
           h1= "Não tem produtos"
         else
           for item in items
-          
-            if item.isActive 
+            h1=item
+
+            if !item.cancelled 
               ul(class='items') 
                 
                 div(class='name')= "Nome do produto: "+  item.name
