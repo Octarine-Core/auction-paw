@@ -50,13 +50,10 @@ ItemSchema.virtual("currentPrice").get(function(){
 ItemSchema.virtual("winningBid").get(function(){
     //devolve nulo se estiver cancelado, ainda nao tiver expirado, ou nao tiver bids.
     if(this.isStrictlyExpired && this.bids.length != 0){
-        Bid.find({}, function(err, docs){
-            console.log(docs);
-            var valueBids = [];
-            docs.forEach(bid => {
-                valueBids.push(bid.value);
-            });
-           return Math.max(valueBids)
+        Bid.find({  '_id':{
+                    $in: this.bids}}
+            , function(err, docs){
+            return(docs[0]);
        });
     }
     return null;

@@ -29,16 +29,16 @@ controller.myItems = function (req, res, next) {
     });
 };
 
-//Devolve os items cujo user passado pelo body ganhou
-
+//Devolve os items cujo user autenticado ganhou
 controller.userWonAuctions = function(req, res, next){
     var wonItems = [];
-    Item.find()
+    Item.find(
+        {'bids.0':{'$exists': true}}
+    )
     .populate('bids')
     .exec(
         function(err, items){
             items.forEach(item => {
-                console.log(item)
                 if(item.isStrictlyExpired && item.bids.length > 0){
                     if(item.bids[item.bids.length - 1].bidder == req.user._id){
                         wonItems.push(item);
@@ -46,7 +46,7 @@ controller.userWonAuctions = function(req, res, next){
                 };
             });
             res.items = wonItems;
-            console.log(res.items);
+            console.log(wonItems);
             next();
         }  
     )
@@ -134,7 +134,6 @@ controller.deActivate = function (req, res, next) {
 //Cria um item
 controller.create = function (req, res, next) {
     var item = new Item(req.body);
-    console.log(req.body);
     item.expires = moment().add(req.body.time, "weeks");
     item.owner = req.user._id;
     for (let i = 0; i < req.files.length; i++) {
