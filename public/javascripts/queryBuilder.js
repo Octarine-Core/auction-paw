@@ -1,8 +1,9 @@
-var params = {
-    parameter1: 'value1',
-    parameter2: 'value2',
-    parameter3: 'value3' 
-}
+var input = document.getElementById('SearchBar');
 
-var query = $.param(params);
-document.write(query);
+function submitQuery(){
+
+
+    var name = document.getElementById('SearchBar').value;
+
+    window.location.href+='?name=~' + name 
+}

@@ -57,12 +57,15 @@ controller.query = function (req, res, next) {
     if (!req.query) res.send({});
     var qs = new MongoQs();
     console.log(qs.parse(req.query));
-    Item.find(qs.parse(req.query), function (err, items) {
+    Item.find(qs.parse(req.query))
+    .populate('bids')
+    .exec(function (err, items) {
         if (err) next(err);
         res.items = items;
-        next();
-    });
-};
+        next()
+    }) 
+}
+
 
 //faz um lance, recebe o item updatado como resposta
 controller.bid = function (req, res, next) {
