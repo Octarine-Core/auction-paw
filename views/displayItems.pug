@@ -24,7 +24,10 @@ html
           .mdl-layout-spacer
           // Navigation
           nav.mdl-navigation
-            a#myBtn Login/Registar
+            if !userId
+              a#myBtn Login/Registar
+            else
+              a(href='http://localhost:3000/logout') Logout
       .mdl-layout__drawer
         span.mdl-layout-title BIDS SITE
         nav.mdl-navigation
@@ -34,6 +37,17 @@ html
       main.mdl-layout__content
 
         input(type="search", name="name", id="SearchBar")
+        select(class="browser-default custom-select" name="category" value="outros" id='Category')
+          option(value="~" name="category") Qualquer
+          option(value="tecnologia" name="category") Tecnologia
+          option(value="automoveis" name="category") Automóveis
+          option(value="imoveis" name="category") Imóveis
+          option(value="antiguidades" name="category") Antiguidades
+          option(value="livros" name="category") Livros
+          option(value="joalharia" name="category") Joalharia
+          option(value="arte" name="category") Arte
+          option(value="outros" name="category") Outros
+                
         input(type="button", value="SEARCH", onclick='submitQuery()', id='submitButton')
 
 
@@ -48,10 +62,14 @@ html
                 div(class='name')= "Nome do produto: "+  item.name
                 div(class='descricao')= "Descrição do produto: "+item.description
                 div(class='categoria')="Categoria do produto: "+ item.category
+                if(item.bids.length > 0)
+                  div()='Preco:  ' + item.bids[item.bids.length - 1].value/100 + "€"
+                else
+                  div()='Preco:  ' + item.minimum/100 + "€"
                 div(class='bids')= "Lances do produto: " 
-                ul
-                  for bid in item.bids
-                    li #{bid.value/100} EUR em #{bid.date} 
+                  ul
+                    for bid in item.bids
+                      li #{bid.value/100} EUR em #{bid.date} 
                 div(class='criado')= "Iniciado a: "+item.createdOn
                 div(class='expires')="Término do leilão: "+ item.expires
                 div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 + "€"

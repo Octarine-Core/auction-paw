@@ -24,7 +24,7 @@ html
           .mdl-layout-spacer
           // Navigation
           nav.mdl-navigation
-            a#myBtn Login/Registar
+            a(href='/logout') Logout
       .mdl-layout__drawer
         span.mdl-layout-title BIDS SITE
         nav.mdl-navigation
@@ -57,12 +57,18 @@ html
           br
           input(type="submit", value="GERAR TOKEN DE API")
         h5 TOKENS
-        for token in tokens
-          p1=token
+        ul
+          for token in tokens
+            li
+              p1(class='items')=token
+
+        if showWon
+          h1='LEILOES QUE GANHEI'
+          a(href='http://localhost:3000/me') voltar atras
+        else
+          h1='LEILOES CRIADOS POR MIM' 
           br
-        
-        h4 OS MEUS ARTIGOS
-        
+          a(href='http://localhost:3000/me/won') Ver Leiloes ganhos        
 
         if !items
           h1= "Não tem produtos"
@@ -74,16 +80,23 @@ html
                 div(class='name')= "Nome do produto: "+  item.name
                 div(class='descricao')= "Descrição do produto: "+item.description
                 div(class='categoria')="Categoria do produto: "+ item.category
-                div(class='bids')= "Lances do produto: "+item.bids
+                if(item.bids.length > 0)
+                  div()='Preco:  ' + item.bids[item.bids.length - 1].value/100 + "€"
+                else
+                  div()='Preco:  ' + item.minimum/100 + "€"
+                div(class='bids')= "Lances do produto: "
+                  ul
+                    for bid in item.bids
+                      li #{bid.value/100} EUR em #{bid.date} 
                 div(class='criado')= "Iniciado a: "+item.createdOn
                 div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 + "€"
                 div(class='expires')="Término do leilão: "+ item.expires
-                div= "Ativo: SIM"
+                div= "CANCELADO: NAO"
                 div(hidden='true')= item.id
-                
-                div
-                  form(action='/disable/' + item.id, method='POST')
-                    button(type='submit') Desativar
+                if !showWon
+                  div
+                    form(action='/disable/' + item.id, method='POST')
+                      button(type='submit') Desativar
                 div
                   for img, indx in item.images
                     if indx == 0
@@ -93,11 +106,14 @@ html
                 div(class='name')= "Nome do produto: "+  item.name
                 div(class='descricao')= "Descrição do produto: "+item.description
                 div(class='categoria')="Categoria do produto: "+ item.category
-                div(class='bids')= "Lances do produto: "+item.bids
+                div(class='bids')= "Lances do produto: "
+                  ul
+                    for bid in item.bids
+                      li #{bid.value/100} EUR em #{bid.date} 
                 div(class='criado')= "Iniciado a: "+item.createdOn
                 div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 +"€"
                 div(class='expires')="Término do leilão: "+ item.expires
-                div="Ativo: NÃO"
+                div="CANCELADO: SIM"
                 div
                   for img, indx in item.images
                     if indx == 0

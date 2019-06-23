@@ -35,19 +35,19 @@ html
 
         if users.length == 0
           h1= "Não tem utilizadores adicionados"
+        else
+          h1= 'USERS'
         for user in users
         
           if user.isActive 
             ul(class='users') 
               
               div(class='name')= "Nome do utilizador: "+  user.name
-              div(class='email')= "email: "+ user.description
-              div(class='password')="password: "+ user.category
+              div(class='email')= "email: "+ user.email
+              div(class='password')="password: "+ user.password
               div(class='isAdmin')= "adnmin: "+user.isAdmin
               //vamos verificar se existe
-              div(class='isActive')= "ativo: "+ user.createdOn
-        
-              div= "Ativo: SIM"
+              div(class='isActive')= "ativo: "+ user.isActive        
               div(hidden='true')= user.id
               
               div
@@ -64,6 +64,39 @@ html
 
               div="Ativo: NÃO"
               div
+
+        if !items
+          h1= "Não tem artigos em leilao"
+        else
+          h1= 'ITEMS'
+          for item in items
+            
+            if item.cancelled == false
+              ul(class='items') 
+                
+                div(class='name')= "Nome do produto: "+  item.name
+                div(class='descricao')= "Descrição do produto: "+item.description
+                div(class='categoria')="Categoria do produto: "+ item.category
+                if(item.bids.length > 0)
+                  div()='Preco:  ' + item.bids[item.bids.length - 1].value/100 + "€"
+                else
+                  div()='Preco:  ' + item.minimum/100 + "€"
+                div(class='bids')= "Lances do produto: " 
+                ul
+                  for bid in item.bids
+                    li #{bid.value/100} EUR em #{bid.date} 
+                div(class='criado')= "Iniciado a: "+item.createdOn
+                div(class='expires')="Término do leilão: "+ item.expires
+                div(class='minimum')= "Valor inicial do leilão: "+item.minimum/100 + "€"
+                div(hidden='true')= item.id
+                div=userId
+                div
+                  form(action='/disable/' + item.id, method='POST')
+                      button(type='submit') Desativar
+                div
+                  img(class='image' src="http://localhost:3000/imagens/items/"+ item.images[0])
+                div
+                  a(href='/viewItem/' + item.id) VER ITEM
 
     
         
@@ -85,4 +118,4 @@ html
             .novoRegisto
               br
               h8
-                a(href='#')  Ainda não está registado? Clique aqui!
+                a(href='/register')  Ainda não está registado? Clique aqui!

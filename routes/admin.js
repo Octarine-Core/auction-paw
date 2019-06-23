@@ -28,5 +28,11 @@ function(req,res){
     res.render('backOffice', {users: res.users, items: res.items})}
 );
 
-router.post('/')
+router.post('/disable/:id', logged, checkAdmin, userController.disableUser, function(req, res){
+  res.redirect('/')
+})
+
+router.post('/deActivate/:id', logged, checkAdmin, itemController.deActivate, function(req, res){
+  res.redirect('/');
+})
 module.exports = router;

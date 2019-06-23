@@ -61,10 +61,14 @@ controller.generateApiToken = function(req, res, next){
 
 //previne um user de fazer login
 controller.disableUser = function(req, res, next){
-    User.update({_id: req.params.id}, {isActive: false}, function(err, user){
+    if(!req.user.isAdmin && req.user._id != req.params.id){
+        next(500);
+    }
+    else 
+    {User.update({_id: req.params.id}, {isActive: false}, function(err, user){
         if(err)next(err)
         else next();
-    });
+    })}
 };
 
 //torna um user num admin

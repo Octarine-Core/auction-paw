@@ -16,7 +16,7 @@ function login() {
       url: '/login',
       data: formData,
       success: function () {
-        $( "html" ).html( data );
+        alert('logged')
       },
       dataType: 'json',
       contentType: 'application/json'

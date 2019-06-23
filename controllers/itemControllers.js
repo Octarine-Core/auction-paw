@@ -22,12 +22,15 @@ controller.allItems = function (req, res, next) {
 
 //Envia os items cujo owner e' o user a fazer o pedido
 controller.myItems = function (req, res, next) {
-    Item.find({ owner: req.user._id }, function (err, items) {
-        if (err) next(err)
-        res.items = items;
-        next();
+    Item.find({owner: req.user._id}).populate('bids').populate('owner').exec(function(err, items){
+        if(err)next(err);
+        else{
+            res.items = items;
+            next();
+        }
     });
 };
+
 
 //Devolve os items cujo user autenticado ganhou
 controller.userWonAuctions = function(req, res, next){
@@ -36,11 +39,18 @@ controller.userWonAuctions = function(req, res, next){
         {'bids.0':{'$exists': true}}
     )
     .populate('bids')
+    .populate('owner')
     .exec(
         function(err, items){
             items.forEach(item => {
-                if(item.isStrictlyExpired && item.bids.length > 0){
-                    if(item.bids[item.bids.length - 1].bidder == req.user._id){
+                console.log(item.bids[0].bidder);
+                console.log(req.user._id);
+                console.log(String(item.bids[0].bidder) === String(req.user._id));
+                console.log(item.isStrictlyExpired);
+                if(item.isStrictlyExpired){
+                    console.log('check passed')
+                    if(String(item.bids[item.bids.length - 1].bidder) === String(req.user._id)){
+                        console.log('pushed');
                         wonItems.push(item);
                     };
                 };
@@ -51,6 +61,7 @@ controller.userWonAuctions = function(req, res, next){
         }  
     )
 };
+
 
 //Envia ID, recebe Item com esse id
 controller.byID = function (req, res, next) {
@@ -78,40 +89,40 @@ controller.query = function (req, res, next) {
 controller.bid = function (req, res, next) {
     Item.findById(req.params.id, (err, item) => {
         console.log(req.body);
-        if (err) res.send(createError(err));
-        if (!item.isActive) res.send(createError(404));
-        req.body.bid*=100;
-        Bid.find(
-            {
-                '_id':{
-                    $in: item.bids
-                }
-            },function(err, bids){
-                if(bids.length !== 0){
-                    var valueBids = [];
-                    bids.forEach(bid => {
-                        valueBids.push(bid.value);
-                    });
-                    if((req.body.bid < Math.max(valueBids)))next(createError(500));
-                }
+        if (err) next(createError(err));
+        if (!item.isActive) next(createError(404));
+        else{req.body.bid*=100;
+            Bid.find(
+                {
+                    '_id':{
+                        $in: item.bids
+                    }
+                },function(err, bids){
+                    if(bids.length !== 0){
+                        var valueBids = [];
+                        bids.forEach(bid => {
+                            valueBids.push(bid.value);
+                        });
+                        if((req.body.bid < Math.max(valueBids)))next(createError(500));
+                    }
 
-            }
-        );
-        var newBid = new Bid({
-            bidder: req.user._id,
-            value: req.body.bid
-        });
-        newBid.save(function(err, bid){
-            if(err)next(err);
-            item.bids.push(newBid._id);
-            item.save(function (err, item) {
-                if (err) {
-                    next(err)
-                };
-                res.item = item;
-                next();
-        });
-        });    
+                }
+            );
+            var newBid = new Bid({
+                bidder: req.user._id,
+                value: req.body.bid
+            });
+            newBid.save(function(err, bid){
+                if(err)next(err);
+                item.bids.push(newBid._id);
+                item.save(function (err, item) {
+                    if (err) {
+                        next(err)
+                    };
+                    res.item = item;
+                    next();
+            });
+        }); }   
     });
 };
 
@@ -122,9 +133,9 @@ controller.deActivate = function (req, res, next) {
         if (item.isActive) {
             Item.findByIdAndUpdate(req.params.id, { $set: { cancelled: true } },
                 { new: true }, function (req, respond) {
-                    if (err) console.log(err);
+                    if (err) next(createError(err));
                     else{
-                        res.redirect('back');
+                        next()
                     }
                 });
         };

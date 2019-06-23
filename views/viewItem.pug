@@ -20,7 +20,10 @@ html
           .mdl-layout-spacer
           // Navigation
           nav.mdl-navigation
-            a#myBtn Login/Registar
+            if !userId
+              a#myBtn Login/Registar
+            else
+              a(href='http://localhost:3000/logout') Logout
       .mdl-layout__drawer
         span.mdl-layout-title BIDS SITE
         nav.mdl-navigation

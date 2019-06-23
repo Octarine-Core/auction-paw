@@ -57,13 +57,13 @@ router.post("/register",function(req, res, next){
 router.post("/save", upload.array('bla', 10), itemController.create, function(req, res){res.redirect('/me')});
 
 //Faz render dos meus items
-router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens}))});
+router.get("/me", logged, itemController.myItems, function(req, res){(res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens, showWon: false}))});
 
 //Faz render dos leiloes que eu ganhei
 router.get("/me/won", logged,
   itemController.userWonAuctions,
    function(req, res){ 
-     res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens})
+     res.render('me', {name: req.user.name, items: res.items, tokens: req.user.tokens, showWon: true})
     },
 );
 
@@ -81,7 +81,7 @@ router.get("/items", itemController.query, function(req, res){
 });
 
 router.get("/viewItem/:id",itemController.byID, function(req, res){
-  res.render('viewItem', {item: res.item});
+  res.render('viewItem', {item: res.item, userId: req.user._id});
 });
 
 router.post("/bid/:id",logged, itemController.bid, function(req, res){

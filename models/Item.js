@@ -37,27 +37,17 @@ var ItemSchema = new mongoose.Schema(
         }
 );
 ItemSchema.virtual("currentPrice").get(function(){
-    if(!this.isActive){
+    if(!this.isStrictlyExpired){
         return null;
     }
     if(this.bids.length==0) return this.minimum
     else{
-        Bid.findById(this.bids[this.bids.length], function(err, bid){
+        Bid.findById(this.bids[this.bids.length - 1], function(err, bid){
             return bid;
         });
     };
 })
-ItemSchema.virtual("winningBid").get(function(){
-    //devolve nulo se estiver cancelado, ainda nao tiver expirado, ou nao tiver bids.
-    if(this.isStrictlyExpired && this.bids.length != 0){
-        Bid.find({  '_id':{
-                    $in: this.bids}}
-            , function(err, docs){
-            return(docs[0]);
-       });
-    }
-    return null;
-});
+
 
 ItemSchema.virtual("isActive").get(function(){
     //Verifica se esta ativo verificando se ainda esta dentro do prazo de expiracao

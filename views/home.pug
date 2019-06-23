@@ -23,7 +23,9 @@ html
             if !userId
               a#myBtn Login/Registar
             else
-              a#myBtn Logout
+              a(href='http://localhost:3000/logout') Admin
+              br
+              a(href='http://localhost:3000/logout') Logout
       .mdl-layout__drawer
         span.mdl-layout-title BIDS SITE
         nav.mdl-navigation
@@ -32,10 +34,10 @@ html
           //a.mdl-navigation__link(href='http://localhost:3000/register') Register
 
           if userId === ""
-            a#myBtn.mdl-navigation__link(href='') Login/Registar
-            a.myBtn.mdl-navigation__link(href='http://localhost:3000/')
+            a#myBtn Login/Registar
+            a#myBtn.mdl-navigation__link(href='http://localhost:3000/')
           else
-            a#myBtn.mdl-navigation__link Logout
+            a#myBtn.mdl-navigation__link(href='http://localhost:3000/logout') Logout
       main.mdl-layout__content
         .conteudo-site
           h2.titles-index Categorias

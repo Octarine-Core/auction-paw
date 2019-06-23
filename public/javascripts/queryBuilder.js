@@ -4,6 +4,7 @@ function submitQuery(){
 
 
     var name = document.getElementById('SearchBar').value;
+    var category = document.getElementById('Category').value;
 
-    window.location.href+='?name=~' + name 
+    window.location.href = 'http://localhost:3000/items/?name=~' + name + '&category=' + category;
 }
