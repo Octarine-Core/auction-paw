@@ -15,9 +15,7 @@ function login() {
       type: 'POST',
       url: '/login',
       data: formData,
-      success: function () {
-        alert('logged')
-      },
+      success: function () {      },
       dataType: 'json',
       contentType: 'application/json'
     });
